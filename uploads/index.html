@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FileVault — Upload Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #030508;
+    --surface: #0b0e14;
+    --surface2: #121620;
+    --border: #1e2535;
+    --accent: #4f8bff;
+    --accent2: #a259ff;
+    --accent3: #00e5c3;
+    --text: #e8ecf4;
+    --muted: #5a6480;
+    --danger: #ff4f6e;
+    --success: #00e5a0;
+    --warn: #ffb547;
+    --glow: rgba(79,139,255,0.18);
+    --glow2: rgba(162,89,255,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── BACKGROUND ─── */
+  .bg-canvas {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .bg-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(120px); opacity: 0.22;
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  .bg-orb:nth-child(1) { width: 600px; height: 600px; background: #4f8bff; top: -150px; left: -100px; animation-delay: 0s; }
+  .bg-orb:nth-child(2) { width: 500px; height: 500px; background: #a259ff; bottom: -100px; right: -100px; animation-delay: -6s; }
+  .bg-orb:nth-child(3) { width: 350px; height: 350px; background: #00e5c3; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: -12s; opacity: 0.1; }
+  .grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  @keyframes drift {
+    from { transform: translate(0,0) scale(1); }
+    to { transform: translate(40px, 30px) scale(1.08); }
+  }
+
+  /* ─── LAYOUT ─── */
+  .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* ─── HEADER ─── */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 0 0;
+    animation: fadeDown 0.7s ease both;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem;
+    letter-spacing: -0.02em;
+  }
+  .logo-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; box-shadow: 0 0 20px var(--glow);
+  }
+  .logo span { color: var(--accent); }
+  .nav-pills { display: flex; gap: 6px; }
+  .nav-pill {
+    padding: 8px 16px; border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted); font-size: 0.82rem; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.22s ease;
+    font-family: 'DM Mono', monospace;
+  }
+  .nav-pill:hover, .nav-pill.active {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent); box-shadow: 0 0 16px var(--glow);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    text-align: center; padding: 72px 0 48px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 5px 14px 5px 8px;
+    border-radius: 999px; border: 1px solid rgba(79,139,255,0.3);
+    background: rgba(79,139,255,0.08);
+    font-size: 0.75rem; font-family: 'DM Mono', monospace;
+    color: var(--accent); margin-bottom: 28px;
+    letter-spacing: 0.04em;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent3);
+    box-shadow: 0 0 8px var(--accent3);
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+  h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    line-height: 1.08; letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  h1 .grad {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, var(--accent3) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    color: var(--muted); font-size: 1.05rem; max-width: 480px;
+    margin: 0 auto; line-height: 1.65; font-weight: 300;
+  }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    display: flex; gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden;
+    margin-bottom: 36px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+  .stat {
+    flex: 1; padding: 16px 20px;
+    background: var(--surface);
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .stat:hover { background: var(--surface2); }
+  .stat-val {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.5rem; color: var(--accent);
+  }
+  .stat-lbl { font-size: 0.72rem; color: var(--muted); margin-top: 2px; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ─── DROP ZONE ─── */
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 20px;
+    padding: 56px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.28s ease;
+    background: var(--surface);
+    position: relative; overflow: hidden;
+    animation: fadeUp 0.8s 0.25s ease both;
+  }
+  .drop-zone::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, var(--glow) 0%, transparent 70%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .drop-zone:hover::before, .drop-zone.drag-over::before { opacity: 1; }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--accent);
+    box-shadow: 0 0 40px var(--glow), inset 0 0 40px rgba(79,139,255,0.04);
+    transform: translateY(-2px);
+  }
+  .drop-zone.drag-over { border-style: solid; }
+  .drop-icon {
+    width: 72px; height: 72px; margin: 0 auto 20px;
+    background: linear-gradient(135deg, rgba(79,139,255,0.15), rgba(162,89,255,0.15));
+    border-radius: 20px; display: flex; align-items: center; justify-content: center;
+    font-size: 30px; border: 1px solid rgba(79,139,255,0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .drop-zone:hover .drop-icon { transform: scale(1.08) translateY(-3px); box-shadow: 0 12px 30px rgba(79,139,255,0.2); }
+  .drop-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem;
+    margin-bottom: 8px;
+  }
+  .drop-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 24px; }
+  .drop-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 28px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; border: none;
+    box-shadow: 0 4px 20px rgba(79,139,255,0.35);
+    transition: all 0.22s ease;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .drop-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,139,255,0.5); }
+  .drop-btn:active { transform: translateY(0); }
+  .drop-meta {
+    margin-top: 20px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .drop-tag {
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--surface2); border: 1px solid var(--border);
+    font-size: 0.75rem; color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+  #file-input { display: none; }
+
+  /* ─── UPLOAD QUEUE ─── */
+  .queue-section {
+    margin-top: 28px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .queue-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+    display: flex; align-items: center; gap: 8px; color: var(--text);
+  }
+  .section-title .count {
+    background: var(--accent); color: #fff;
+    border-radius: 999px; padding: 1px 8px;
+    font-size: 0.72rem; font-family: 'DM Mono', monospace;
+  }
+  .btn-ghost {
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); padding: 6px 14px; border-radius: 8px;
+    font-size: 0.78rem; cursor: pointer; font-family: 'DM Mono', monospace;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--danger); color: var(--danger); }
+  .btn-upload-all {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; color: #fff; padding: 8px 20px; border-radius: 10px;
+    font-size: 0.85rem; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    font-weight: 600; transition: all 0.22s;
+    box-shadow: 0 4px 16px rgba(79,139,255,0.3);
+  }
+  .btn-upload-all:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(79,139,255,0.45); }
+  .btn-upload-all:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .queue-actions { display: flex; gap: 8px; }
+
+  /* ─── FILE CARDS ─── */
+  .file-list { display: flex; flex-direction: column; gap: 10px; }
+  .file-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px 16px;
+    display: flex; align-items: center; gap: 14px;
+    transition: all 0.2s ease;
+    position: relative; overflow: hidden;
+  }
+  .file-card::after {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    border-radius: 2px 0 0 2px;
+    background: var(--border); transition: background 0.3s;
+  }
+  .file-card.status-pending::after { background: var(--muted); }
+  .file-card.status-uploading::after { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .file-card.status-done::after { background: var(--success); box-shadow: 0 0 8px var(--success); }
+  .file-card.status-error::after { background: var(--danger); }
+
+  .file-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 19px; flex-shrink: 0;
+    background: var(--surface2); border: 1px solid var(--border);
+  }
+  .file-info { flex: 1; min-width: 0; }
+  .file-name {
+    font-weight: 500; font-size: 0.9rem; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px;
+  }
+  .file-meta {
+    font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted);
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .file-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 14px; transition: all 0.2s;
+    color: var(--muted);
+  }
+  .icon-btn:hover { background: rgba(255,79,110,0.1); border-color: var(--danger); color: var(--danger); }
+
+  /* Progress bar */
+  .progress-wrap {
+    margin-top: 8px; height: 4px; background: var(--surface2);
+    border-radius: 99px; overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.3s ease;
+    box-shadow: 0 0 8px var(--glow);
+  }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 0.7rem; padding: 2px 9px; border-radius: 999px;
+    font-family: 'DM Mono', monospace; font-weight: 500;
+  }
+  .status-badge.pending { background: rgba(90,100,128,0.2); color: var(--muted); }
+  .status-badge.uploading { background: rgba(79,139,255,0.15); color: var(--accent); }
+  .status-badge.done { background: rgba(0,229,160,0.12); color: var(--success); }
+  .status-badge.error { background: rgba(255,79,110,0.12); color: var(--danger); }
+
+  /* ─── TOAST ─── */
+  #toast-container {
+    position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+    display: flex; flex-direction: column; gap: 10px;
+    pointer-events: none;
+  }
+  .toast {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 18px; border-radius: 13px;
+    background: var(--surface2); border: 1px solid var(--border);
+    backdrop-filter: blur(20px);
+    font-size: 0.85rem; min-width: 260px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    animation: toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+    pointer-events: all;
+  }
+  .toast.success { border-color: rgba(0,229,160,0.3); }
+  .toast.error { border-color: rgba(255,79,110,0.3); }
+  .toast-icon { font-size: 18px; }
+  .toast-text { flex: 1; }
+  .toast-text strong { display: block; font-weight: 600; font-size: 0.88rem; }
+  .toast-text span { color: var(--muted); font-size: 0.78rem; }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(40px) scale(0.9); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  .toast.fade-out { animation: toastOut 0.3s ease forwards; }
+  @keyframes toastOut {
+    to { opacity: 0; transform: translateX(40px) scale(0.9); }
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center; padding: 56px 0 32px;
+    color: var(--muted); font-size: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    text-align: center; padding: 40px 20px;
+    color: var(--muted); font-size: 0.9rem;
+    display: none;
+  }
+  .empty-state .emoji { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .stats-bar { flex-direction: column; gap: 0; }
+    .stat { border-bottom: 1px solid var(--border); }
+    .nav-pill { padding: 7px 12px; font-size: 0.78rem; }
+    .hero { padding: 48px 0 32px; }
+    .drop-zone { padding: 36px 20px; }
+    .queue-actions { flex-direction: column; }
+  }
+
+  /* ─── LOADING SKELETON ─── */
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+  .shimmer {
+    background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px; height: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-canvas">
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="grid-lines"></div>
+</div>
+
+<div class="wrapper">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">📦</div>
+      File<span>Vault</span>
+    </div>
+    <nav class="nav-pills">
+      <a href="index.html" class="nav-pill active">Upload</a>
+      <a href="dashboard.html" class="nav-pill">Dashboard</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      GitHub-Backed Storage • Netlify Powered
+    </div>
+    <h1>Drop files.<br><span class="grad">Store forever.</span></h1>
+    <p class="hero-sub">Upload any file — any format, any size — and it lands directly in your GitHub repository. No limits. No friction.</p>
+  </section>
+
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat">
+      <div class="stat-val" id="stat-total">—</div>
+      <div class="stat-lbl">Total Files</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-size">—</div>
+      <div class="stat-lbl">Total Size</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-today">—</div>
+      <div class="stat-lbl">Uploaded Today</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-session">0</div>
+      <div class="stat-lbl">This Session</div>
+    </div>
+  </div>
+
+  <div class="drop-zone" id="drop-zone">
+    <div class="drop-icon">📂</div>
+    <div class="drop-title">Drag & drop your files here</div>
+    <p class="drop-sub">Supports every format — images, videos, docs, archives, code files...</p>
+    <button class="drop-btn" id="browse-btn">
+      <span>📁</span> Browse Files
+    </button>
+    <div class="drop-meta">
+      <span class="drop-tag">Any format</span>
+      <span class="drop-tag">Unlimited files</span>
+      <span class="drop-tag">GitHub stored</span>
+      <span class="drop-tag">Instant deploy</span>
+    </div>
+    <input type="file" id="file-input" multiple>
+  </div>
+
+  <div class="queue-section" id="queue-section" style="display:none">
+    <div class="queue-header">
+      <div class="section-title">
+        Upload Queue <span class="count" id="queue-count">0</span>
+      </div>
+      <div class="queue-actions">
+        <button class="btn-ghost" id="clear-btn">✕ Clear done</button>
+        <button class="btn-upload-all" id="upload-all-btn">⚡ Upload All</button>
+      </div>
+    </div>
+    <div class="file-list" id="file-list"></div>
+  </div>
+
+  <footer>
+    Built with ♥ — <a href="dashboard.html">View your vault →</a>
+    <br><br>
+    <span style="opacity:0.5">FileVault • GitHub + Netlify Storage System</span>
+  </footer>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
+let queue = [];
+let sessionUploads = 0;
+
+const FILE_ICONS = {
+  // Images
+  jpg:'🖼️',jpeg:'🖼️',png:'🖼️',gif:'🎞️',webp:'🖼️',svg:'🎨',avif:'🖼️',bmp:'🖼️',ico:'🖼️',
+  // Video
+  mp4:'🎬',mov:'🎬',avi:'🎬',mkv:'🎬',webm:'🎬',m4v:'🎬',
+  // Audio
+  mp3:'🎵',wav:'🎵',ogg:'🎵',flac:'🎵',aac:'🎵',m4a:'🎵',
+  // Docs
+  pdf:'📄',doc:'📝',docx:'📝',xls:'📊',xlsx:'📊',ppt:'📋',pptx:'📋',txt:'📄',md:'📝',
+  // Code
+  js:'💻',ts:'💻',jsx:'💻',tsx:'💻',html:'🌐',css:'🎨',py:'🐍',java:'☕',cpp:'⚙️',
+  c:'⚙️',cs:'💻',php:'💻',rb:'💻',go:'💻',rs:'⚙️',swift:'🍎',kt:'💻',
+  json:'📋',xml:'📋',yaml:'📋',yml:'📋',toml:'📋',env:'🔐',
+  // Archives
+  zip:'📦',rar:'📦',tar:'📦',gz:'📦','7z':'📦',bz2:'📦',
+  // Misc
+  exe:'⚙️',dmg:'💿',apk:'📱',iso:'💿',db:'🗄️',sql:'🗄️',sh:'⚙️',bat:'⚙️',
+};
+
+function getIcon(name) {
+  const ext = name.split('.').pop()?.toLowerCase() || '';
+  return FILE_ICONS[ext] || '📎';
+}
+
+function formatBytes(b) {
+  if (b === 0) return '0 B';
+  const k = 1024, sizes = ['B','KB','MB','GB'];
+  const i = Math.floor(Math.log(b) / Math.log(k));
+  return parseFloat((b / Math.pow(k,i)).toFixed(1)) + ' ' + sizes[i];
+}
+
+function uid() { return Math.random().toString(36).slice(2); }
+
+// ═══════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════
+function toast(type, title, sub) {
+  const c = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  const icons = { success:'✅', error:'❌', info:'ℹ️', warn:'⚠️' };
+  el.className = `toast ${type}`;
+  el.innerHTML = `
+    <div class="toast-icon">${icons[type]||'📢'}</div>
+    <div class="toast-text">
+      <strong>${title}</strong>
+      ${sub ? `<span>${sub}</span>` : ''}
+    </div>
+  `;
+  c.appendChild(el);
+  setTimeout(() => {
+    el.classList.add('fade-out');
+    setTimeout(() => el.remove(), 350);
+  }, 3800);
+}
+
+// ═══════════════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════════════
+async function loadStats() {
+  try {
+    const res = await fetch('/.netlify/functions/list-files');
+    const data = await res.json();
+    const files = data.files || [];
+    const today = new Date().toDateString();
+    const todayCount = files.filter(f => f.uploadedAt && new Date(f.uploadedAt).toDateString() === today).length;
+    const totalSize = files.reduce((a,f) => a + (f.size||0), 0);
+    document.getElementById('stat-total').textContent = files.length;
+    document.getElementById('stat-size').textContent = formatBytes(totalSize);
+    document.getElementById('stat-today').textContent = todayCount;
+  } catch {
+    document.getElementById('stat-total').textContent = '?';
+  }
+}
+
+function updateSessionStat() {
+  document.getElementById('stat-session').textContent = sessionUploads;
+}
+
+// ═══════════════════════════════════════════════════
+// QUEUE UI
+// ═══════════════════════════════════════════════════
+function renderQueue() {
+  const section = document.getElementById('queue-section');
+  const list = document.getElementById('file-list');
+  const count = document.getElementById('queue-count');
+  count.textContent = queue.length;
+  section.style.display = queue.length ? 'block' : 'none';
+  list.innerHTML = '';
+  queue.forEach(item => {
+    const card = document.createElement('div');
+    card.className = `file-card status-${item.status}`;
+    card.id = `card-${item.id}`;
+    const statusLabels = { pending:'⏳ Pending', uploading:'⬆️ Uploading', done:'✓ Done', error:'✕ Error' };
+    card.innerHTML = `
+      <div class="file-icon">${getIcon(item.file.name)}</div>
+      <div class="file-info">
+        <div class="file-name">${item.file.name}</div>
+        <div class="file-meta">
+          <span>${formatBytes(item.file.size)}</span>
+          <span>${item.file.type || 'unknown'}</span>
+          <span class="status-badge ${item.status}">${statusLabels[item.status]||item.status}</span>
+          ${item.error ? `<span style="color:var(--danger);font-size:0.7rem">${item.error}</span>` : ''}
+        </div>
+        ${item.status === 'uploading' ? `<div class="progress-wrap"><div class="progress-bar" id="prog-${item.id}" style="width:${item.progress||0}%"></div></div>` : ''}
+        ${item.status === 'done' && item.result ? `<div style="margin-top:4px;font-size:0.7rem;color:var(--accent);font-family:'DM Mono',monospace;">✓ Stored as ${item.result.storedAs}</div>` : ''}
+      </div>
+      <div class="file-actions">
+        ${item.status === 'pending' ? `<div class="icon-btn" onclick="uploadSingle('${item.id}')" title="Upload now">⬆️</div>` : ''}
+        ${item.status === 'done' && item.result?.downloadUrl ? `<a class="icon-btn" href="${item.result.downloadUrl}" target="_blank" title="View file" style="text-decoration:none">🔗</a>` : ''}
+        <div class="icon-btn" onclick="removeFromQueue('${item.id}')" title="Remove">✕</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function addToQueue(files) {
+  Array.from(files).forEach(f => {
+    queue.push({ id: uid(), file: f, status: 'pending', progress: 0, result: null, error: null });
+  });
+  renderQueue();
+  toast('info', `${files.length} file${files.length>1?'s':''} added`, 'Ready to upload');
+}
+
+function removeFromQueue(id) {
+  queue = queue.filter(i => i.id !== id);
+  renderQueue();
+}
+
+function clearDone() {
+  queue = queue.filter(i => i.status !== 'done');
+  renderQueue();
+}
+
+// ═══════════════════════════════════════════════════
+// UPLOAD
+// ═══════════════════════════════════════════════════
+function fileToBase64(file) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+async function uploadItem(item) {
+  item.status = 'uploading';
+  item.progress = 10;
+  renderQueue();
+
+  try {
+    const b64 = await fileToBase64(item.file);
+    item.progress = 40;
+    document.querySelector(`#prog-${item.id}`)?.style && (document.querySelector(`#prog-${item.id}`).style.width = '40%');
+
+    const res = await fetch('/.netlify/functions/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fileName: item.file.name,
+        fileData: b64,
+        fileType: item.file.type,
+        fileSize: item.file.size,
+      }),
+    });
+
+    item.progress = 90;
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Upload failed');
+
+    item.status = 'done';
+    item.progress = 100;
+    item.result = data;
+    sessionUploads++;
+    updateSessionStat();
+    toast('success', `${item.file.name}`, 'Uploaded to GitHub ✓');
+    loadStats();
+  } catch (err) {
+    item.status = 'error';
+    item.error = err.message;
+    toast('error', 'Upload failed', err.message);
+  }
+
+  renderQueue();
+}
+
+async function uploadSingle(id) {
+  const item = queue.find(i => i.id === id);
+  if (!item || item.status !== 'pending') return;
+  await uploadItem(item);
+}
+
+async function uploadAll() {
+  const btn = document.getElementById('upload-all-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Uploading...';
+  const pending = queue.filter(i => i.status === 'pending');
+  // Upload concurrently (max 3 at a time)
+  const chunks = [];
+  for (let i = 0; i < pending.length; i += 3) chunks.push(pending.slice(i, i+3));
+  for (const chunk of chunks) {
+    await Promise.all(chunk.map(uploadItem));
+  }
+  btn.disabled = false;
+  btn.textContent = '⚡ Upload All';
+}
+
+// ═══════════════════════════════════════════════════
+// DRAG & DROP
+// ═══════════════════════════════════════════════════
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+
+dropZone.addEventListener('click', e => {
+  if (e.target.closest('.icon-btn') || e.target.closest('a')) return;
+  fileInput.click();
+});
+
+document.getElementById('browse-btn').addEventListener('click', e => {
+  e.stopPropagation();
+  fileInput.click();
+});
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length) addToQueue(fileInput.files);
+  fileInput.value = '';
+});
+
+['dragenter','dragover'].forEach(ev => {
+  dropZone.addEventListener(ev, e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  document.addEventListener(ev, e => e.preventDefault());
+});
+
+['dragleave','dragend'].forEach(ev => {
+  dropZone.addEventListener(ev, () => dropZone.classList.remove('drag-over'));
+});
+
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const files = e.dataTransfer.files;
+  if (files.length) addToQueue(files);
+});
+
+// Prevent browser from opening files dropped outside drop zone
+document.addEventListener('drop', e => e.preventDefault());
+
+document.getElementById('upload-all-btn').addEventListener('click', uploadAll);
+document.getElementById('clear-btn').addEventListener('click', clearDone);
+
+// ═══════════════════════════════════════════════════
+// PASTE SUPPORT
+// ═══════════════════════════════════════════════════
+document.addEventListener('paste', e => {
+  const files = Array.from(e.clipboardData?.files || []);
+  if (files.length) {
+    addToQueue(files);
+    toast('info', 'Pasted!', `${files.length} file(s) from clipboard`);
+  }
+});
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+loadStats();
+</script>
+</body>
+</html>
