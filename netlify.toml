@@ -1,13 +1,32 @@
 [build]
   functions = "netlify/functions"
-  publish = "."
+  publish   = "."
 
 [functions]
   node_bundler = "esbuild"
 
+[functions."upload"]
+  timeout = 30
+
+[functions."files"]
+  timeout = 20
+
+[functions."auth"]
+  timeout = 15
+
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
+    X-Frame-Options        = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/style.css"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/vault.js"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

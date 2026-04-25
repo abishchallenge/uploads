@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FileVault — Sign In</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.login-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 40px; width: 100%; max-width: 420px; position: relative; z-index: 1; }
+.login-logo { text-align: center; margin-bottom: 32px; }
+.login-logo .logo-mark { width: 52px; height: 52px; border-radius: 16px; margin: 0 auto 12px; font-size: 24px; }
+.login-logo h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; }
+.login-logo h1 em { color: var(--accent); font-style: normal; }
+.login-logo p { color: var(--text2); font-size: 0.85rem; margin-top: 4px; }
+.tab-switch { display: flex; background: var(--surface2); border-radius: 99px; padding: 4px; margin-bottom: 28px; border: 1px solid var(--border); }
+.tab-switch button { flex: 1; padding: 8px; border-radius: 99px; border: none; background: none; color: var(--text2); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: var(--transition); font-family: var(--font-body); }
+.tab-switch button.active { background: var(--accent); color: #fff; box-shadow: 0 2px 12px var(--glow); }
+.form-group { margin-bottom: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.input-wrap { position: relative; }
+.input-wrap .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 15px; pointer-events: none; }
+.input-wrap input { padding-left: 38px; }
+.input-wrap .input-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 15px; color: var(--muted); padding: 0; }
+.form-err { color: var(--danger); font-size: 0.78rem; margin-top: 5px; display: none; }
+.form-err.show { display: block; }
+.submit-btn { width: 100%; padding: 12px; border-radius: 99px; border: none; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-weight: 700; font-size: 0.95rem; cursor: pointer; margin-top: 8px; transition: var(--transition); font-family: var(--font-body); box-shadow: 0 4px 20px var(--glow); }
+.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,139,255,0.5); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.public-link { text-align: center; margin-top: 20px; font-size: 0.82rem; color: var(--text2); }
+.public-link a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.divider-text { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--muted); font-size: 0.75rem; font-family: var(--font-mono); }
+.divider-text::before, .divider-text::after { content:''; flex: 1; height: 1px; background: var(--border); }
+.strength-bar { height: 3px; border-radius: 99px; margin-top: 6px; background: var(--surface3); overflow: hidden; }
+.strength-fill { height: 100%; border-radius: 99px; transition: width 0.3s, background 0.3s; width: 0; }
+</style>
+</head>
+<body>
+<div class="bg-canvas">
+  <div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div>
+  <div class="bg-grid"></div><div class="bg-noise"></div>
+</div>
+
+<div class="login-page">
+  <div class="login-card anim-up">
+    <div class="login-logo">
+      <div class="logo-mark" style="background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;box-shadow:0 0 24px var(--glow)">📦</div>
+      <h1>File<em>Vault</em></h1>
+      <p>Secure GitHub-powered file storage</p>
+    </div>
+
+    <div class="tab-switch">
+      <button class="active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+      <button id="tab-register" onclick="switchTab('register')">Create Account</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="form-login">
+      <div class="form-group">
+        <label class="label">Username</label>
+        <div class="input-wrap">
+          <span class="input-icon">👤</span>
+          <input class="input" type="text" id="l-username" placeholder="your_username" autocomplete="username">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Password</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔑</span>
+          <input class="input" type="password" id="l-password" placeholder="••••••••" autocomplete="current-password">
+          <button class="input-toggle" onclick="togglePw('l-password',this)">👁️</button>
+        </div>
+      </div>
+      <div class="form-err" id="l-err"></div>
+      <button class="submit-btn" id="l-btn" onclick="doLogin()">Sign In →</button>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="form-register" style="display:none">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="label">Username *</label>
+          <div class="input-wrap">
+            <span class="input-icon">@</span>
+            <input class="input" type="text" id="r-username" placeholder="cool_name" autocomplete="username">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="label">Display Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">✨</span>
+            <input class="input" type="text" id="r-display" placeholder="Your Name">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Email (optional)</label>
+        <div class="input-wrap">
+          <span class="input-icon">📧</span>
+          <input class="input" type="email" id="r-email" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="label">Password *</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔑</span>
+          <input class="input" type="password" id="r-password" placeholder="Min 6 characters" oninput="checkStrength(this.value)" autocomplete="new-password">
+          <button class="input-toggle" onclick="togglePw('r-password',this)">👁️</button>
+        </div>
+        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+      </div>
+      <div class="form-group">
+        <label class="label">Confirm Password *</label>
+        <div class="input-wrap">
+          <span class="input-icon">🔒</span>
+          <input class="input" type="password" id="r-confirm" placeholder="Re-enter password" autocomplete="new-password">
+        </div>
+      </div>
+      <div class="form-err" id="r-err"></div>
+      <button class="submit-btn" id="r-btn" onclick="doRegister()">Create Account →</button>
+    </div>
+
+    <div class="divider-text">or</div>
+    <div class="public-link">
+      <a href="public.html">👁️ Browse public files without signing in</a>
+    </div>
+  </div>
+</div>
+
+<div id="toast-root"></div>
+<script src="vault.js"></script>
+<script>
+// Redirect if already logged in
+if (Auth.isLogged()) window.location.href = Auth.isAdmin() ? 'admin.html' : 'index.html';
+
+function switchTab(t) {
+  document.getElementById('form-login').style.display    = t==='login'    ? '' : 'none';
+  document.getElementById('form-register').style.display = t==='register' ? '' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', t==='login');
+  document.getElementById('tab-register').classList.toggle('active', t==='register');
+}
+
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+function checkStrength(pw) {
+  const fill = document.getElementById('strength-fill');
+  let score = 0;
+  if (pw.length >= 6)  score++;
+  if (pw.length >= 10) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^a-zA-Z0-9]/.test(pw)) score++;
+  const colors = ['','#ff4f6e','#ffb547','#4f8bff','#00e5a0','#00e5a0'];
+  fill.style.width  = (score * 20) + '%';
+  fill.style.background = colors[score] || '#ff4f6e';
+}
+
+async function doLogin() {
+  const btn = document.getElementById('l-btn');
+  const username = document.getElementById('l-username').value.trim();
+  const password = document.getElementById('l-password').value;
+  if (!username || !password) return showErr('l-err', 'Please fill all fields');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  try {
+    const data = await api('auth', { action:'login', username, password });
+    Auth.set(data.user);
+    toast('success', `Welcome back, ${data.user.displayName || username}!`);
+    setTimeout(() => { window.location.href = data.user.role === 'admin' ? 'admin.html' : 'index.html'; }, 800);
+  } catch(err) {
+    showErr('l-err', err.message);
+    btn.disabled = false; btn.textContent = 'Sign In →';
+  }
+}
+
+async function doRegister() {
+  const btn = document.getElementById('r-btn');
+  const username = document.getElementById('r-username').value.trim();
+  const display  = document.getElementById('r-display').value.trim();
+  const email    = document.getElementById('r-email').value.trim();
+  const password = document.getElementById('r-password').value;
+  const confirm  = document.getElementById('r-confirm').value;
+  if (!username || !password) return showErr('r-err', 'Username and password are required');
+  if (password !== confirm)   return showErr('r-err', 'Passwords do not match');
+  if (password.length < 6)   return showErr('r-err', 'Password must be at least 6 characters');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  try {
+    const data = await api('auth', { action:'register', username, password, displayName: display || username, email });
+    Auth.set(data.user);
+    toast('success', 'Account created! Welcome to FileVault 🎉');
+    setTimeout(() => { window.location.href = 'index.html'; }, 900);
+  } catch(err) {
+    showErr('r-err', err.message);
+    btn.disabled = false; btn.textContent = 'Create Account →';
+  }
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  const activeForm = document.getElementById('form-login').style.display !== 'none' ? 'login' : 'register';
+  if (activeForm === 'login') doLogin(); else doRegister();
+});
+</script>
+</body>
+</html>
