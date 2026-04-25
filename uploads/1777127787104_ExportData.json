@@ -1,0 +1,1240 @@
+{
+	"items": [
+		{
+			"name": "userActions",
+			"data": []
+		},
+		{
+			"name": "CollaborationIntensity",
+			"data": [
+				{
+					"Id": "OID:E1587EDA-254E-4DB9-8293-D33211DD29E1@F8E5EE17-1080-482B-87E2-FA6B0FCF9DFC",
+					"Properties": {
+						"TransactionId": 45,
+						"CollaborationIntensityScore": 1.149,
+						"EmailSentIntensity": 0.399,
+						"EmailViewedIntensity": 0.748,
+						"ChatSentIntensity": 0,
+						"ChatReceivedIntensity": 0,
+						"CallIntensity": 0,
+						"MeetingIntensity": 0,
+						"CollaborationIntensityMaxLifetime": 1.149,
+						"AggregatedTotalTimeCurrentWeek": 5.75,
+						"AggregatedTotalTimeLast2Weeks": 5.75,
+						"AggregatedTotalTimeLast4Weeks": 5.75,
+						"AggregatedTotalTimeLast12Weeks": 5.75,
+						"AggregatedTotalTime": 5.75,
+						"AggregatedTotalTimeEmailSent": 2,
+						"AggregatedTotalTimeEmailViewed": 3.75,
+						"AggregatedTotalTimeChatSent": 0,
+						"AggregatedTotalTimeChatReceived": 0,
+						"AggregatedTotalTimeMeeting": 0,
+						"AggregatedTotalTimeCall": 0,
+						"MaxAggregatedTotalTimeLast1Week": 5.75,
+						"MaxAggregatedTotalTimeLast2Weeks": 5.75,
+						"MaxAggregatedTotalTimeLast4Weeks": 5.75,
+						"MaxAggregatedTotalTimeLast12Weeks": 5.75,
+						"TotalWeeksWithCollaboration": 1,
+						"RecentWeekWithCollaboration": "2026-01-07T07:57:19.99+00:00",
+						"FirstWeekWithCollaboration": "2026-01-06T14:38:47.2374+00:00",
+						"CollaborationIntensityMaxLifetimeDate": "2026-01-07T07:57:19.99+00:00",
+						"MaxAggregatedTotalTimeLast1WeekDate": "2026-01-05T00:00:00+00:00",
+						"LastUpdatedWeek": "2026-01-05T00:00:00+00:00",
+						"IsTwoWayInteraction": true,
+						"Buckets": [
+							345,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0
+						]
+					}
+				},
+				{
+					"Id": "OID:318EC19E-04AD-49DB-BE9A-D7B28D2CDC06@F8E5EE17-1080-482B-87E2-FA6B0FCF9DFC",
+					"Properties": {
+						"TransactionId": 36,
+						"CollaborationIntensityScore": 0.204,
+						"EmailSentIntensity": 0,
+						"EmailViewedIntensity": 0.204,
+						"ChatSentIntensity": 0,
+						"ChatReceivedIntensity": 0,
+						"CallIntensity": 0,
+						"MeetingIntensity": 0,
+						"CollaborationIntensityMaxLifetime": 0.499,
+						"AggregatedTotalTimeCurrentWeek": 0,
+						"AggregatedTotalTimeLast2Weeks": 0,
+						"AggregatedTotalTimeLast4Weeks": 0,
+						"AggregatedTotalTimeLast12Weeks": 2.5,
+						"AggregatedTotalTime": 2.5,
+						"AggregatedTotalTimeEmailSent": 0,
+						"AggregatedTotalTimeEmailViewed": 2.5,
+						"AggregatedTotalTimeChatSent": 0,
+						"AggregatedTotalTimeChatReceived": 0,
+						"AggregatedTotalTimeMeeting": 0,
+						"AggregatedTotalTimeCall": 0,
+						"MaxAggregatedTotalTimeLast1Week": 2.5,
+						"MaxAggregatedTotalTimeLast2Weeks": 2.5,
+						"MaxAggregatedTotalTimeLast4Weeks": 2.5,
+						"MaxAggregatedTotalTimeLast12Weeks": 2.5,
+						"TotalWeeksWithCollaboration": 1,
+						"RecentWeekWithCollaboration": "2025-12-03T13:54:13.578+00:00",
+						"FirstWeekWithCollaboration": "2025-12-03T09:15:45.408+00:00",
+						"CollaborationIntensityMaxLifetimeDate": "2025-12-03T13:54:13.578+00:00",
+						"MaxAggregatedTotalTimeLast1WeekDate": "2025-12-01T00:00:00+00:00",
+						"LastUpdatedWeek": "2025-12-29T00:00:00+00:00",
+						"IsTwoWayInteraction": false,
+						"Buckets": [
+							0,
+							0,
+							0,
+							0,
+							150,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0,
+							0
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "collaborationNetworks",
+			"data": {
+				"Value": []
+			}
+		},
+		{
+			"name": "UserProfileInfo",
+			"data": {
+				"@odata.context": "https://substrate.office.com/profileb2/v2.0/users/d0dc430d-5f29-42b8-a04d-aa2c39742a95@f8e5ee17-1080-482b-87e2-fa6b0fcf9dfc/$metadata#profile(accounts(),addresses(),anniversaries(),directoryExtensionAttributes(),educationalActivities(),names(),emails(),notes(),interests(),languages(),phones(),positions(),projects(),responsibilities(),skills(),topics(),webAccounts(),websites(),awards(),publications(),patents(),certifications(),extensions(),photos(),profileVideoMetadata(),summary(),directories())",
+				"profileId": "profileId",
+				"lastModifiedDateTime": "2025-12-08T10:53:13.7391211Z",
+				"activities": [],
+				"accounts": [
+					{
+						"ageGroup": "",
+						"countryCode": "",
+						"userPrincipalName": "MBA243953@tjohngroup.com",
+						"externalDirectoryObjectId": "d0dc430d-5f29-42b8-a04d-aa2c39742a95",
+						"alias": "MBA243953",
+						"exchangeAccountType": "UserMailbox",
+						"exchangeAccountTypeDetails": "UserMailbox",
+						"cid": null,
+						"puid": 1153801136751323000,
+						"userType": "Member",
+						"accountEnabled": true,
+						"isSipEnabled": true,
+						"profileMemberType": null,
+						"userPersona": "InternalMember",
+						"searchableByProfile": null,
+						"isTeamsForLifeUser": null,
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745336Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.5089456Z",
+						"id": "18405054-ea2d-492a-8056-700d43b0b1d3",
+						"isSearchable": false,
+						"preferredLanguageTag": {
+							"locale": null,
+							"displayName": null
+						},
+						"originTenantInfo": null,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "MsGraph",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD",
+								"MsGraph"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d",
+								"isDefaultSource": true
+							},
+							{
+								"id": "0024a795-114d-4031-95c7-5fb543e00e80",
+								"properties": [
+									"isSipEnabled"
+								]
+							}
+						]
+					},
+					{
+						"ageGroup": "",
+						"countryCode": "",
+						"userPrincipalName": "",
+						"externalDirectoryObjectId": "",
+						"alias": "",
+						"exchangeAccountType": "UserMailbox",
+						"exchangeAccountTypeDetails": "UserMailbox",
+						"cid": null,
+						"puid": null,
+						"userType": null,
+						"accountEnabled": null,
+						"isSipEnabled": true,
+						"profileMemberType": null,
+						"userPersona": null,
+						"searchableByProfile": null,
+						"isTeamsForLifeUser": null,
+						"allowedAudiences": "federatedOrganizations",
+						"createdDateTime": "2025-11-20T04:30:06.2745339Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.5089456Z",
+						"id": "fe551754-cdb4-49ea-8254-653d3dbee809",
+						"isSearchable": false,
+						"preferredLanguageTag": {
+							"locale": null,
+							"displayName": null
+						},
+						"originTenantInfo": null,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "MsGraph",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD",
+								"MsGraph"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d",
+								"isDefaultSource": true
+							},
+							{
+								"id": "0024a795-114d-4031-95c7-5fb543e00e80",
+								"properties": [
+									"isSipEnabled"
+								]
+							}
+						]
+					}
+				],
+				"addresses": [],
+				"anniversaries": [],
+				"directoryExtensionAttributes": [
+					{
+						"displayName": "CustomAttribute1",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745415Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745416Z",
+						"id": "b0ad6af0-694d-4693-926d-b67c6e179722",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute2",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745417Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745417Z",
+						"id": "0b769509-c62d-4e6c-96ff-baf9e1dce3f1",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute3",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745418Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745419Z",
+						"id": "a03cb4f6-6e89-484f-937d-2f3b0d1cf068",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute4",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.274542Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.274542Z",
+						"id": "3574cece-a7cd-4ab3-9d41-190bd5e48142",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute5",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745421Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745421Z",
+						"id": "1ca964a1-d1dc-4027-b653-0d88fc82001a",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute6",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745422Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745423Z",
+						"id": "bca4ba6c-b339-4649-bdbc-03080e0c2a2b",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute7",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745424Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745424Z",
+						"id": "fb0ebb12-41a1-46ca-8825-ce17cb16c371",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute8",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745425Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745425Z",
+						"id": "0d414bfb-d526-4870-8fde-d7e10a1ff011",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute9",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745426Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745427Z",
+						"id": "964655a1-941d-4699-a3e3-95448c782e15",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute10",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745428Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745428Z",
+						"id": "0d05c33c-df35-4575-b90b-12060c1b7d82",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute11",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745429Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.274543Z",
+						"id": "9ff10207-d29b-466e-a450-35970ff060ff",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute12",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745431Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745431Z",
+						"id": "9c6ca5eb-8af0-4bbb-add5-da7be398972b",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute13",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745432Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745433Z",
+						"id": "8cdc028c-074b-4ed0-886d-3e11587c8632",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute14",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745434Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745434Z",
+						"id": "df57848a-1a73-424c-b8e3-122558a77091",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"displayName": "CustomAttribute15",
+						"value": "",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745435Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745436Z",
+						"id": "f98bf7c7-1596-4376-8cec-db241dfd4b56",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					}
+				],
+				"educationalActivities": [],
+				"names": [
+					{
+						"displayName": "ABISH R",
+						"first": "ABISH R",
+						"initials": "",
+						"last": "",
+						"languageTag": null,
+						"maiden": null,
+						"middle": null,
+						"nickname": null,
+						"suffix": null,
+						"title": null,
+						"allowedAudiences": "organization, federatedOrganizations",
+						"createdDateTime": "2025-11-20T04:30:06.2745371Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745378Z",
+						"id": "AadSource",
+						"isSearchable": false,
+						"pronunciation": null,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					}
+				],
+				"emails": [
+					{
+						"address": "MBA243953@tjohngroup.com",
+						"displayName": null,
+						"type": "main",
+						"allowedAudiences": "organization, federatedOrganizations",
+						"createdDateTime": "2025-11-20T04:30:06.2745379Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.274538Z",
+						"id": "806e9ad4-8045-4030-9124-412e90342448",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					}
+				],
+				"notes": [],
+				"interests": [],
+				"languages": [
+					{
+						"displayName": "English (United Kingdom)",
+						"tag": "en-GB",
+						"spoken": null,
+						"written": null,
+						"reading": null,
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-23T07:09:37.5750954Z",
+						"lastModifiedDateTime": "2025-11-23T07:09:37.5750955Z",
+						"id": "f8b1b90c-5d07-4c95-8fb4-adecabd691ee",
+						"isSearchable": false,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					}
+				],
+				"phones": [],
+				"positions": [
+					{
+						"categories": [],
+						"isCurrent": true,
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.27454Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.2745413Z",
+						"id": "aa92230e-2bae-4736-adcd-2cf5e12e7422",
+						"isSearchable": false,
+						"detail": {
+							"description": null,
+							"endMonthYear": "0001-01-01T00:00:00Z",
+							"jobTitle": "Student",
+							"role": null,
+							"startMonthYear": "0001-01-01T00:00:00Z",
+							"summary": null,
+							"level": "",
+							"layer": null,
+							"secondaryJobTitle": null,
+							"secondaryRole": null,
+							"employeeId": null,
+							"employeeType": null,
+							"company": {
+								"displayName": "",
+								"pronunciation": null,
+								"department": "MBA",
+								"companyCode": null,
+								"officeLocation": "",
+								"webUrl": null,
+								"secondaryDepartment": null,
+								"costCenter": null,
+								"division": null,
+								"address": {
+									"type": "business",
+									"postOfficeBox": null,
+									"street": "",
+									"city": "",
+									"state": "",
+									"countryOrRegion": "IN",
+									"postalCode": ""
+								}
+							}
+						},
+						"manager": null,
+						"colleagues": [],
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					}
+				],
+				"projects": [],
+				"responsibilities": [],
+				"skills": [],
+				"topics": [],
+				"webAccounts": [
+					{
+						"userId": "SIP:mba243953@tjohngroup.com",
+						"description": "Address used for interacting with a user through instant messaging services",
+						"statusMessage": null,
+						"webUrl": null,
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745389Z",
+						"lastModifiedDateTime": "2025-11-20T04:30:06.274539Z",
+						"id": "c491e4f4-903d-4d8b-b356-bc58924a3c87",
+						"isSearchable": false,
+						"service": {
+							"name": "Microsoft Teams for Business",
+							"webUrl": "graph.microsoft.com/teams"
+						},
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					},
+					{
+						"userId": "",
+						"description": null,
+						"statusMessage": null,
+						"webUrl": "https://tjohngroup-my.sharepoint.com/personal/mba243953_tjohngroup_com",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-24T17:26:22.7618393Z",
+						"lastModifiedDateTime": "2025-11-24T17:26:22.7618395Z",
+						"id": "0f1ee98d-ac9e-423d-9e02-18bb9854bbb7",
+						"isSearchable": false,
+						"service": {
+							"name": "",
+							"webUrl": ""
+						},
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "UPA",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "UPA",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"UPA"
+							]
+						},
+						"sources": [
+							{
+								"id": "6cdc4422-8c05-40c5-902e-8ade707725ab"
+							}
+						]
+					}
+				],
+				"websites": [],
+				"awards": [],
+				"publications": [],
+				"patents": [],
+				"certifications": [],
+				"extensions": [],
+				"photos": [
+					{
+						"changeKey": "W/\"a1bf902cae2f45fd8bca5f8fb06171ae4bb130f0387b6573fe1926fedc6af90f\"",
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-24T17:26:21.833467Z",
+						"lastModifiedDateTime": "2025-11-24T17:26:21.8334674Z",
+						"id": "57f82f36-46ec-48b2-98fd-80fca2e929b0",
+						"isSearchable": false,
+						"photoDetail": {
+							"url": "https://graph.microsoft.com/v1.0/users/MBA243953@tjohngroup.com/photo/$value"
+						},
+						"createdBy": {
+							"user": null,
+							"application": null,
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "PhotoETag",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"PhotoETag"
+							]
+						},
+						"sources": [
+							{
+								"id": "107a83c9-714e-4d52-9d08-c303f081323b"
+							}
+						]
+					}
+				],
+				"profileVideoMetadata": {
+					"profileVideoUrl": null,
+					"allowedAudiences": "organization",
+					"createdDateTime": "2025-11-20T04:30:05.7363558Z",
+					"lastModifiedDateTime": "2025-11-20T04:30:05.7363558Z",
+					"id": "5b655357-e97d-4292-b83c-c539085fd593",
+					"isSearchable": false,
+					"createdBy": {
+						"user": null,
+						"application": null,
+						"device": null
+					},
+					"inference": null,
+					"lastModifiedBy": {
+						"user": null,
+						"application": null,
+						"device": null
+					},
+					"source": {
+						"type": [
+							"User"
+						]
+					},
+					"sources": [
+						{
+							"id": "46a57efc-33f8-4eec-a512-b90039ad6187"
+						}
+					]
+				},
+				"summary": null,
+				"directories": [
+					{
+						"hiddenFromAddressListsEnabled": false,
+						"legacyExchangeDN": "/o=ExchangeLabs/ou=Exchange Administrative Group (FYDIBOHF23SPDLT)/cn=Recipients/cn=178a6b06edf14021800fd9c1e10968ae-d0dc430d-5f",
+						"adObjectId": "a6f83b14-1f0b-4674-a16a-8aa7b8960579",
+						"resourceProvisioningOptions": [],
+						"altSecurityIdentities": [
+							"MS-WLID:10032005518126F2",
+							"KERBEROS:10032005518126F2@live.com"
+						],
+						"informationBarrierSegments": [],
+						"userIdentityParent": null,
+						"isAgenticUser": false,
+						"mtoLabel": null,
+						"mtoLabelType": null,
+						"mtoTenantName": null,
+						"mtoFlag": false,
+						"allowedAudiences": "organization",
+						"createdDateTime": "2025-11-20T04:30:06.2745347Z",
+						"lastModifiedDateTime": "2025-12-08T10:53:02.112131Z",
+						"id": "07631e54-54c5-4fe5-8c43-9a86ab4095af",
+						"isSearchable": false,
+						"ibDetails": null,
+						"createdBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"inference": null,
+						"lastModifiedBy": {
+							"user": null,
+							"application": {
+								"displayName": "AAD",
+								"id": null
+							},
+							"device": null
+						},
+						"source": {
+							"type": [
+								"AAD"
+							]
+						},
+						"sources": [
+							{
+								"id": "4ce763dd-9214-4eff-af7c-da491cc3782d"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"name": "PeopleHighlights",
+			"data": []
+		},
+		{
+			"name": "CommunicationMemory",
+			"data": {}
+		},
+		{
+			"name": "Pronouns",
+			"data": []
+		},
+		{
+			"name": "PeopleAgentFavoritePeople",
+			"data": []
+		},
+		{
+			"name": "ConnectorsData",
+			"data": []
+		}
+	]
+}
