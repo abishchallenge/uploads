@@ -23,7 +23,9 @@
       },
       "comments": [],
       "favouritedBy": [],
-      "trashed": false
+      "trashed": true,
+      "trashedAt": "2026-04-26T16:06:32.645Z",
+      "trashReason": "user_delete"
     },
     {
       "id": "fv1777215790805c2nb",
@@ -212,5 +214,5 @@
       "favouritedBy": []
     }
   ],
-  "updatedAt": "2026-04-26T16:06:09.468Z"
+  "updatedAt": "2026-04-26T16:06:32.645Z"
 }
