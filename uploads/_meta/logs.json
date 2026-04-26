@@ -1,11 +1,1 @@
-{
-  "logs": [
-    {
-      "type": "profile_update",
-      "username": "abish",
-      "detail": "Profile updated",
-      "at": "2026-04-26T14:59:50.617Z",
-      "id": "mofw9y3d"
-    }
-  ]
-}
+{"logs":[{"type":"upload","username":"abish","fileName":"index.html","fileSize":17825,"filePath":"uploads/1777215790805_index.html","folder":"","fileType":"text/html","at":"2026-04-26T15:03:12.002Z","id":"mofwe9he"},{"type":"profile_update","username":"abish","detail":"Profile updated","at":"2026-04-26T14:59:50.617Z","id":"mofw9y3d"}]}
