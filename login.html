@@ -5,123 +5,108 @@
 <title>FileVault — Sign In</title>
 <link rel="stylesheet" href="style.css">
 <style>
-.login-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
-.login-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 40px; width: 100%; max-width: 420px; position: relative; z-index: 1; }
-.login-logo { text-align: center; margin-bottom: 32px; }
-.login-logo .logo-mark { width: 52px; height: 52px; border-radius: 16px; margin: 0 auto 12px; font-size: 24px; }
-.login-logo h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; }
-.login-logo h1 em { color: var(--accent); font-style: normal; }
-.login-logo p { color: var(--text2); font-size: 0.85rem; margin-top: 4px; }
-.tab-switch { display: flex; background: var(--surface2); border-radius: 99px; padding: 4px; margin-bottom: 28px; border: 1px solid var(--border); }
-.tab-switch button { flex: 1; padding: 8px; border-radius: 99px; border: none; background: none; color: var(--text2); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: var(--transition); font-family: var(--font-body); }
-.tab-switch button.active { background: var(--accent); color: #fff; box-shadow: 0 2px 12px var(--glow); }
-.form-group { margin-bottom: 16px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.input-wrap { position: relative; }
-.input-wrap .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 15px; pointer-events: none; }
-.input-wrap input { padding-left: 38px; }
-.input-wrap .input-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 15px; color: var(--muted); padding: 0; }
-.form-err { color: var(--danger); font-size: 0.78rem; margin-top: 5px; display: none; }
-.form-err.show { display: block; }
-.submit-btn { width: 100%; padding: 12px; border-radius: 99px; border: none; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-weight: 700; font-size: 0.95rem; cursor: pointer; margin-top: 8px; transition: var(--transition); font-family: var(--font-body); box-shadow: 0 4px 20px var(--glow); }
-.submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,139,255,0.5); }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.public-link { text-align: center; margin-top: 20px; font-size: 0.82rem; color: var(--text2); }
-.public-link a { color: var(--accent); text-decoration: none; font-weight: 600; }
-.divider-text { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--muted); font-size: 0.75rem; font-family: var(--font-mono); }
-.divider-text::before, .divider-text::after { content:''; flex: 1; height: 1px; background: var(--border); }
-.strength-bar { height: 3px; border-radius: 99px; margin-top: 6px; background: var(--surface3); overflow: hidden; }
-.strength-fill { height: 100%; border-radius: 99px; transition: width 0.3s, background 0.3s; width: 0; }
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.login-wrap{position:relative;z-index:1;width:100%;max-width:420px}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:36px}
+.login-logo{text-align:center;margin-bottom:28px}
+.login-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;box-shadow:0 0 28px var(--glow)}
+.login-logo h1{font-family:'Syne',sans-serif;font-weight:800;font-size:1.7rem;letter-spacing:-.03em}
+.login-logo h1 em{color:var(--accent);font-style:normal}
+.login-logo p{color:var(--text2);font-size:.84rem;margin-top:4px}
+.tab-sw{display:flex;background:var(--surface2);border-radius:99px;padding:4px;margin-bottom:24px;border:1px solid var(--border)}
+.tab-sw button{flex:1;padding:8px;border-radius:99px;border:none;background:none;color:var(--text2);font-size:.84rem;font-weight:600;cursor:pointer;transition:var(--t);font-family:'DM Sans',sans-serif}
+.tab-sw button.on{background:var(--accent);color:#fff;box-shadow:0 2px 14px var(--glow)}
+.tab-content{display:none}.tab-content.on{display:block}
+.pw-wrap{position:relative}
+.pw-wrap .input{padding-right:38px}
+.pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:2px}
+.pw-toggle:hover{color:var(--text)}
+.strength-row{height:3px;border-radius:99px;background:var(--surface3);margin-top:5px;overflow:hidden}
+.strength-fill{height:100%;border-radius:99px;width:0;transition:width .3s,background .3s}
+.submit-btn{width:100%;padding:13px;border-radius:99px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;margin-top:10px;transition:var(--t);font-family:'DM Sans',sans-serif;box-shadow:0 4px 20px var(--glow)}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,139,255,.55)}
+.submit-btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.err-msg{background:rgba(255,79,110,.1);border:1px solid rgba(255,79,110,.25);border-radius:var(--r-sm);padding:8px 12px;font-size:.8rem;color:var(--danger);margin-top:12px;display:none}
+.err-msg.show{display:block}
+.public-bar{text-align:center;margin-top:20px;font-size:.82rem;color:var(--text2)}
+.public-bar a{color:var(--accent);text-decoration:none;font-weight:600}
+.hint-text{font-size:.75rem;color:var(--muted);margin-top:4px}
 </style>
 </head>
 <body>
-<div class="bg-canvas">
-  <div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div>
-  <div class="bg-grid"></div><div class="bg-noise"></div>
-</div>
-
-<div class="login-page">
-  <div class="login-card anim-up">
+<div class="bg-canvas"><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div><div class="bg-grid"></div></div>
+<div class="login-wrap au">
+  <div class="login-card">
     <div class="login-logo">
-      <div class="logo-mark" style="background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;box-shadow:0 0 24px var(--glow)">📦</div>
+      <div class="login-icon">📦</div>
       <h1>File<em>Vault</em></h1>
-      <p>Secure GitHub-powered file storage</p>
+      <p>Secure GitHub-backed file storage</p>
     </div>
 
-    <div class="tab-switch">
-      <button class="active" id="tab-login" onclick="switchTab('login')">Sign In</button>
-      <button id="tab-register" onclick="switchTab('register')">Create Account</button>
+    <div class="tab-sw">
+      <button id="t-login" class="on" onclick="tab('login')">Sign In</button>
+      <button id="t-reg" onclick="tab('register')">Register</button>
+      <button id="t-forgot" onclick="tab('forgot')">Forgot?</button>
     </div>
 
-    <!-- LOGIN FORM -->
-    <div id="form-login">
+    <!-- LOGIN -->
+    <div class="tab-content on" id="f-login">
       <div class="form-group">
         <label class="label">Username</label>
-        <div class="input-wrap">
-          <span class="input-icon">👤</span>
-          <input class="input" type="text" id="l-username" placeholder="your_username" autocomplete="username">
-        </div>
+        <div class="input-wrap"><span class="i-icon">👤</span><input class="input" id="l-u" type="text" placeholder="your_username" autocomplete="username"></div>
       </div>
       <div class="form-group">
         <label class="label">Password</label>
-        <div class="input-wrap">
-          <span class="input-icon">🔑</span>
-          <input class="input" type="password" id="l-password" placeholder="••••••••" autocomplete="current-password">
-          <button class="input-toggle" onclick="togglePw('l-password',this)">👁️</button>
-        </div>
+        <div class="pw-wrap"><input class="input" id="l-p" type="password" placeholder="••••••••" autocomplete="current-password"><button class="pw-toggle" onclick="togglePw('l-p',this)">👁️</button></div>
       </div>
-      <div class="form-err" id="l-err"></div>
+      <div class="err-msg" id="l-err"></div>
       <button class="submit-btn" id="l-btn" onclick="doLogin()">Sign In →</button>
+      <div class="public-bar" style="margin-top:14px"><a href="public.html">Browse public files without signing in →</a></div>
     </div>
 
-    <!-- REGISTER FORM -->
-    <div id="form-register" style="display:none">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="label">Username *</label>
-          <div class="input-wrap">
-            <span class="input-icon">@</span>
-            <input class="input" type="text" id="r-username" placeholder="cool_name" autocomplete="username">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="label">Display Name</label>
-          <div class="input-wrap">
-            <span class="input-icon">✨</span>
-            <input class="input" type="text" id="r-display" placeholder="Your Name">
-          </div>
-        </div>
+    <!-- REGISTER -->
+    <div class="tab-content" id="f-reg">
+      <div class="form-row form-row-2">
+        <div class="form-group"><label class="label">Username *</label><div class="input-wrap"><span class="i-icon">@</span><input class="input" id="r-u" type="text" placeholder="cool_name" autocomplete="username"></div></div>
+        <div class="form-group"><label class="label">Display Name</label><div class="input-wrap"><span class="i-icon">✨</span><input class="input" id="r-dn" type="text" placeholder="Your Name"></div></div>
       </div>
-      <div class="form-group">
-        <label class="label">Email (optional)</label>
-        <div class="input-wrap">
-          <span class="input-icon">📧</span>
-          <input class="input" type="email" id="r-email" placeholder="you@example.com">
-        </div>
-      </div>
+      <div class="form-group"><label class="label">Email (optional)</label><div class="input-wrap"><span class="i-icon">📧</span><input class="input" id="r-e" type="email" placeholder="you@example.com"></div></div>
       <div class="form-group">
         <label class="label">Password *</label>
-        <div class="input-wrap">
-          <span class="input-icon">🔑</span>
-          <input class="input" type="password" id="r-password" placeholder="Min 6 characters" oninput="checkStrength(this.value)" autocomplete="new-password">
-          <button class="input-toggle" onclick="togglePw('r-password',this)">👁️</button>
-        </div>
-        <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+        <div class="pw-wrap"><input class="input" id="r-p" type="password" placeholder="Min 6 characters" oninput="strength(this.value)" autocomplete="new-password"><button class="pw-toggle" onclick="togglePw('r-p',this)">👁️</button></div>
+        <div class="strength-row"><div class="strength-fill" id="str-fill"></div></div>
       </div>
+      <div class="form-group"><label class="label">Confirm Password *</label><div class="pw-wrap"><input class="input" id="r-c" type="password" placeholder="Repeat password" autocomplete="new-password"></div></div>
       <div class="form-group">
-        <label class="label">Confirm Password *</label>
-        <div class="input-wrap">
-          <span class="input-icon">🔒</span>
-          <input class="input" type="password" id="r-confirm" placeholder="Re-enter password" autocomplete="new-password">
-        </div>
+        <label class="label">Recovery Hint <span style="color:var(--muted);font-weight:400">(for forgot password)</span></label>
+        <input class="input" id="r-hint" type="text" placeholder="e.g. My pet's name is Fluffy">
+        <div class="hint-text">⚠️ This hint will be shown when you forget your password. Don't make it too obvious.</div>
       </div>
-      <div class="form-err" id="r-err"></div>
+      <div class="err-msg" id="r-err"></div>
       <button class="submit-btn" id="r-btn" onclick="doRegister()">Create Account →</button>
     </div>
 
-    <div class="divider-text">or</div>
-    <div class="public-link">
-      <a href="public.html">👁️ Browse public files without signing in</a>
+    <!-- FORGOT -->
+    <div class="tab-content" id="f-forgot">
+      <p style="color:var(--text2);font-size:.86rem;margin-bottom:18px;line-height:1.6">Enter your username to see your password hint, then reset your password.</p>
+      <div id="forgot-step1">
+        <div class="form-group"><label class="label">Username</label><div class="input-wrap"><span class="i-icon">👤</span><input class="input" id="fg-u" type="text" placeholder="your_username"></div></div>
+        <div class="err-msg" id="fg-err1"></div>
+        <button class="submit-btn" id="fg-btn1" onclick="doForgot()">Show My Hint →</button>
+      </div>
+      <div id="forgot-step2" style="display:none">
+        <div style="background:rgba(79,139,255,.08);border:1px solid rgba(79,139,255,.2);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:18px">
+          <div style="font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:4px">YOUR RECOVERY HINT</div>
+          <div id="fg-hint" style="font-size:.9rem;color:var(--accent)"></div>
+        </div>
+        <div class="form-group"><label class="label">Your Hint Answer (exact)</label><input class="input" id="fg-answer" type="text" placeholder="Type your hint exactly"></div>
+        <div class="form-group">
+          <label class="label">New Password</label>
+          <div class="pw-wrap"><input class="input" id="fg-np" type="password" placeholder="New password (min 6)"><button class="pw-toggle" onclick="togglePw('fg-np',this)">👁️</button></div>
+        </div>
+        <div class="err-msg" id="fg-err2"></div>
+        <button class="submit-btn" id="fg-btn2" onclick="doReset()">Reset Password →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -129,85 +114,84 @@
 <div id="toast-root"></div>
 <script src="vault.js"></script>
 <script>
-// Redirect if already logged in
-if (Auth.isLogged()) window.location.href = Auth.isAdmin() ? 'admin.html' : 'index.html';
+if(Auth.logged())location.href=Auth.isAdmin()?'admin.html':'index.html';
 
-function switchTab(t) {
-  document.getElementById('form-login').style.display    = t==='login'    ? '' : 'none';
-  document.getElementById('form-register').style.display = t==='register' ? '' : 'none';
-  document.getElementById('tab-login').classList.toggle('active', t==='login');
-  document.getElementById('tab-register').classList.toggle('active', t==='register');
+function tab(t){
+  ['login','reg','forgot'].forEach(x=>{
+    document.getElementById('f-'+x).classList.toggle('on',x===t);
+    document.getElementById('t-'+(x==='forgot'?'forgot':x)).classList.toggle('on',x===t);
+  });
+  document.getElementById('t-login').classList.toggle('on',t==='login');
+  document.getElementById('t-reg').classList.toggle('on',t==='register');
+  document.getElementById('t-forgot').classList.toggle('on',t==='forgot');
 }
-
-function togglePw(id, btn) {
-  const inp = document.getElementById(id);
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+function tab(t){
+  ['login','reg','forgot'].forEach(id=>{document.getElementById('f-'+id).classList.remove('on')});
+  ['login','reg','forgot'].forEach(id=>{document.getElementById('t-'+id).classList.remove('on')});
+  const map={login:'f-login',register:'f-reg',forgot:'f-forgot'};
+  const tmap={login:'t-login',register:'t-reg',forgot:'t-forgot'};
+  document.getElementById(map[t])?.classList.add('on');
+  document.getElementById(tmap[t])?.classList.add('on');
 }
-
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 4000);
+function togglePw(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁️':'🙈'}
+function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),5000)}
+function strength(pw){
+  let s=0;if(pw.length>=6)s++;if(pw.length>=10)s++;if(/[A-Z]/.test(pw))s++;if(/[0-9]/.test(pw))s++;if(/[^a-zA-Z0-9]/.test(pw))s++;
+  const c=['','#ff4f6e','#ffb547','#4f8bff','#00e5a0','#00e5a0'];
+  const f=document.getElementById('str-fill');f.style.width=(s*20)+'%';f.style.background=c[s];
 }
-
-function checkStrength(pw) {
-  const fill = document.getElementById('strength-fill');
-  let score = 0;
-  if (pw.length >= 6)  score++;
-  if (pw.length >= 10) score++;
-  if (/[A-Z]/.test(pw)) score++;
-  if (/[0-9]/.test(pw)) score++;
-  if (/[^a-zA-Z0-9]/.test(pw)) score++;
-  const colors = ['','#ff4f6e','#ffb547','#4f8bff','#00e5a0','#00e5a0'];
-  fill.style.width  = (score * 20) + '%';
-  fill.style.background = colors[score] || '#ff4f6e';
+async function doLogin(){
+  const btn=document.getElementById('l-btn'),u=document.getElementById('l-u').value.trim(),p=document.getElementById('l-p').value;
+  if(!u||!p)return showErr('l-err','Please fill all fields');
+  btn.disabled=true;btn.textContent='Signing in…';
+  try{
+    const d=await api('auth',{action:'login',username:u,password:p});
+    Auth.set(d.user);toast('success','Welcome back, '+(d.user.displayName||u)+'!');
+    setTimeout(()=>{location.href=d.user.role==='admin'?'admin.html':'index.html'},700);
+  }catch(e){showErr('l-err',e.message);btn.disabled=false;btn.textContent='Sign In →'}
 }
-
-async function doLogin() {
-  const btn = document.getElementById('l-btn');
-  const username = document.getElementById('l-username').value.trim();
-  const password = document.getElementById('l-password').value;
-  if (!username || !password) return showErr('l-err', 'Please fill all fields');
-  btn.disabled = true; btn.textContent = 'Signing in...';
-  try {
-    const data = await api('auth', { action:'login', username, password });
-    Auth.set(data.user);
-    toast('success', `Welcome back, ${data.user.displayName || username}!`);
-    setTimeout(() => { window.location.href = data.user.role === 'admin' ? 'admin.html' : 'index.html'; }, 800);
-  } catch(err) {
-    showErr('l-err', err.message);
-    btn.disabled = false; btn.textContent = 'Sign In →';
-  }
+async function doRegister(){
+  const btn=document.getElementById('r-btn');
+  const u=document.getElementById('r-u').value.trim(),dn=document.getElementById('r-dn').value.trim(),
+    em=document.getElementById('r-e').value.trim(),pw=document.getElementById('r-p').value,
+    cf=document.getElementById('r-c').value,hint=document.getElementById('r-hint').value.trim();
+  if(!u||!pw)return showErr('r-err','Username and password required');
+  if(pw!==cf)return showErr('r-err','Passwords do not match');
+  if(pw.length<6)return showErr('r-err','Password must be at least 6 characters');
+  btn.disabled=true;btn.textContent='Creating…';
+  try{
+    const d=await api('auth',{action:'register',username:u,password:pw,displayName:dn||u,email:em,recoveryHint:hint});
+    Auth.set(d.user);toast('success','Welcome to FileVault! 🎉');
+    setTimeout(()=>{location.href='index.html'},700);
+  }catch(e){showErr('r-err',e.message);btn.disabled=false;btn.textContent='Create Account →'}
 }
-
-async function doRegister() {
-  const btn = document.getElementById('r-btn');
-  const username = document.getElementById('r-username').value.trim();
-  const display  = document.getElementById('r-display').value.trim();
-  const email    = document.getElementById('r-email').value.trim();
-  const password = document.getElementById('r-password').value;
-  const confirm  = document.getElementById('r-confirm').value;
-  if (!username || !password) return showErr('r-err', 'Username and password are required');
-  if (password !== confirm)   return showErr('r-err', 'Passwords do not match');
-  if (password.length < 6)   return showErr('r-err', 'Password must be at least 6 characters');
-  btn.disabled = true; btn.textContent = 'Creating account...';
-  try {
-    const data = await api('auth', { action:'register', username, password, displayName: display || username, email });
-    Auth.set(data.user);
-    toast('success', 'Account created! Welcome to FileVault 🎉');
-    setTimeout(() => { window.location.href = 'index.html'; }, 900);
-  } catch(err) {
-    showErr('r-err', err.message);
-    btn.disabled = false; btn.textContent = 'Create Account →';
-  }
+async function doForgot(){
+  const btn=document.getElementById('fg-btn1'),u=document.getElementById('fg-u').value.trim();
+  if(!u)return showErr('fg-err1','Enter your username');
+  btn.disabled=true;btn.textContent='Looking up…';
+  try{
+    const d=await api('auth',{action:'forgot',username:u});
+    document.getElementById('fg-hint').textContent=d.hint;
+    document.getElementById('forgot-step1').style.display='none';
+    document.getElementById('forgot-step2').style.display='';
+  }catch(e){showErr('fg-err1',e.message);btn.disabled=false;btn.textContent='Show My Hint →'}
 }
-
-// Enter key support
-document.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  const activeForm = document.getElementById('form-login').style.display !== 'none' ? 'login' : 'register';
-  if (activeForm === 'login') doLogin(); else doRegister();
+async function doReset(){
+  const btn=document.getElementById('fg-btn2'),u=document.getElementById('fg-u').value.trim(),
+    hint=document.getElementById('fg-answer').value.trim(),np=document.getElementById('fg-np').value;
+  if(!hint||!np)return showErr('fg-err2','Fill all fields');
+  if(np.length<6)return showErr('fg-err2','Password must be 6+ characters');
+  btn.disabled=true;btn.textContent='Resetting…';
+  try{
+    await api('auth',{action:'reset_password',username:u,recoveryHint:hint,newPassword:np});
+    toast('success','Password reset! Please sign in.');
+    setTimeout(()=>tab('login'),1000);
+  }catch(e){showErr('fg-err2',e.message);btn.disabled=false;btn.textContent='Reset Password →'}
+}
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;
+  if(document.getElementById('f-login').classList.contains('on'))doLogin();
+  else if(document.getElementById('f-reg').classList.contains('on'))doRegister();
 });
 </script>
 </body>

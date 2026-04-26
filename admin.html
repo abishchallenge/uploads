@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FileVault — Admin</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.admin-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:22px}
+.admin-tab{padding:9px 18px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:.82rem;cursor:pointer;font-family:'DM Mono',monospace;transition:var(--t);white-space:nowrap}
+.admin-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 14px var(--glow)}
+.admin-section{display:none}.admin-section.active{display:block}
+/* USER TABLE */
+.user-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;transition:var(--t);flex-wrap:wrap}
+.user-row:hover{border-color:var(--border2)}
+.user-row.banned{border-color:rgba(255,79,110,.25);background:rgba(255,79,110,.03)}
+.user-info{flex:1;min-width:140px}
+.user-name{font-weight:600;font-size:.9rem}
+.user-meta{font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px}
+.user-actions{display:flex;gap:5px;flex-wrap:wrap}
+/* LOG TABLE */
+.log-row{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:9px 14px;border-bottom:1px solid rgba(24,32,46,.5);font-size:.82rem}
+.log-row:last-child{border-bottom:none}
+.log-row:hover{background:var(--surface2)}
+.log-type{padding:2px 8px;border-radius:99px;font-size:.65rem;font-family:'DM Mono',monospace;white-space:nowrap}
+.log-upload{background:rgba(79,139,255,.12);color:var(--accent)}
+.log-delete{background:rgba(255,79,110,.1);color:var(--danger)}
+.log-login{background:rgba(0,229,160,.1);color:var(--success)}
+.log-register{background:rgba(162,89,255,.12);color:var(--accent2)}
+.log-rename{background:rgba(255,181,71,.1);color:var(--warn)}
+.log-other{background:rgba(61,74,98,.2);color:var(--text2)}
+/* FILES TABLE */
+.file-row-admin{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;flex-wrap:wrap;transition:var(--t)}
+.file-row-admin:hover{border-color:var(--border2)}
+/* STAT CARDS */
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+@media(max-width:700px){.admin-stats{grid-template-columns:1fr 1fr}}
+/* SEARCH */
+.admin-toolbar{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap}
+.admin-toolbar .search-box{flex:1;min-width:180px}
+/* EMPTY */
+.log-empty{text-align:center;padding:40px;color:var(--muted);font-size:.86rem}
+</style>
+</head>
+<body>
+<div class="bg-canvas"><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div><div class="bg-grid"></div></div>
+<header class="site-header"><div class="header-inner"></div></header>
+
+<div class="wrapper page-body">
+  <div class="section-head au" style="margin-bottom:22px">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;letter-spacing:-.025em">Admin Panel</h2>
+        <span class="badge badge-gold">⚙️ Admin</span>
+      </div>
+      <p style="color:var(--text2);font-size:.86rem">Full system control — users, files, logs</p>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="loadAll()">↻ Refresh All</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="admin-stats au" id="admin-stats">
+    <div class="stat-card"><div class="stat-val" id="as-users">—</div><div class="stat-lbl">Total Users</div></div>
+    <div class="stat-card"><div class="stat-val" id="as-files">—</div><div class="stat-lbl">Total Files</div></div>
+    <div class="stat-card"><div class="stat-val" id="as-size">—</div><div class="stat-lbl">Total Storage</div></div>
+    <div class="stat-card"><div class="stat-val" id="as-down">—</div><div class="stat-lbl">Total Downloads</div></div>
+  </div>
+
+  <!-- TABS -->
+  <div class="admin-tabs au" style="animation-delay:.06s">
+    <button class="admin-tab active" onclick="showTab('users')">👥 Users</button>
+    <button class="admin-tab" onclick="showTab('files')">📁 All Files</button>
+    <button class="admin-tab" onclick="showTab('logs')">📋 Activity Logs</button>
+    <button class="admin-tab" onclick="showTab('trash')">🗑️ Recycle Bin</button>
+  </div>
+
+  <!-- USERS TAB -->
+  <div class="admin-section active" id="tab-users">
+    <div class="admin-toolbar">
+      <div class="search-box"><span class="s-icon">🔍</span><input class="input" id="user-search" placeholder="Search users…" oninput="filterUsers()"></div>
+      <select class="input select" id="user-filter" style="width:auto" onchange="filterUsers()">
+        <option value="all">All Users</option>
+        <option value="active">Active</option>
+        <option value="banned">Banned</option>
+        <option value="admin">Admins</option>
+      </select>
+    </div>
+    <div id="users-list"><div class="skeleton" style="height:200px"></div></div>
+  </div>
+
+  <!-- FILES TAB -->
+  <div class="admin-section" id="tab-files">
+    <div class="admin-toolbar">
+      <div class="search-box"><span class="s-icon">🔍</span><input class="input" id="file-search" placeholder="Search files…" oninput="filterFiles()"></div>
+      <select class="input select" id="file-user-filter" style="width:auto" onchange="filterFiles()">
+        <option value="">All Users</option>
+      </select>
+      <select class="input select" id="file-sort" style="width:auto" onchange="filterFiles()">
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+        <option value="size">Largest</option>
+        <option value="downloads">Most Downloaded</option>
+      </select>
+    </div>
+    <div id="files-list"><div class="skeleton" style="height:200px"></div></div>
+  </div>
+
+  <!-- LOGS TAB -->
+  <div class="admin-section" id="tab-logs">
+    <div class="admin-toolbar">
+      <div class="search-box"><span class="s-icon">🔍</span><input class="input" id="log-search" placeholder="Search logs…" oninput="filterLogs()"></div>
+      <select class="input select" id="log-type-filter" style="width:auto" onchange="filterLogs()">
+        <option value="">All Types</option>
+        <option value="upload">Uploads</option>
+        <option value="delete">Deletes</option>
+        <option value="login">Logins</option>
+        <option value="register">Registrations</option>
+        <option value="rename">Renames</option>
+      </select>
+    </div>
+    <div class="table-wrap" id="logs-table"><div style="padding:24px;text-align:center;color:var(--muted)">Loading…</div></div>
+  </div>
+
+  <!-- TRASH TAB -->
+  <div class="admin-section" id="tab-trash">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <span style="color:var(--text2);font-size:.86rem">Files in Recycle Bin — restore or permanently delete</span>
+      <button class="btn btn-danger btn-sm" onclick="emptyTrash()">💀 Empty Bin</button>
+    </div>
+    <div id="trash-list"><div class="skeleton" style="height:200px"></div></div>
+  </div>
+</div>
+
+<div id="toast-root"></div>
+<script src="vault.js"></script>
+<script>
+Auth.guardAdmin();
+const sess = Auth.get();
+buildHeader('admin.html');
+
+let allUsers = [], allFiles = [], allLogs = [];
+
+function showTab(id) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── LOAD ALL DATA ──────────────────────────────
+async function loadAll() {
+  await Promise.all([loadUsers(), loadFiles2(), loadLogs()]);
+}
+
+async function loadUsers() {
+  try {
+    const d = await api('auth', { action: 'list_users' });
+    allUsers = d.users || [];
+    renderUsers(allUsers);
+    document.getElementById('as-users').textContent = allUsers.length;
+    // Populate file user filter
+    const sel = document.getElementById('file-user-filter');
+    sel.innerHTML = '<option value="">All Users</option>' + allUsers.map(u => `<option value="${u.username}">${u.username}</option>`).join('');
+  } catch (e) { toast('error', 'Failed to load users', e.message); }
+}
+
+async function loadFiles2() {
+  try {
+    const d = await api('files', null, 'GET');
+    allFiles = d.files || [];
+    const active = allFiles.filter(f => !f.trashed);
+    document.getElementById('as-files').textContent = active.length;
+    document.getElementById('as-size').textContent = fmtBytes(d.totalSize || 0);
+    document.getElementById('as-down').textContent = active.reduce((a, f) => a + (f.downloads || 0), 0);
+    renderFiles2(active);
+    renderTrash(allFiles.filter(f => f.trashed));
+  } catch (e) { toast('error', 'Failed to load files', e.message); }
+}
+
+async function loadLogs() {
+  try {
+    const d = await api('auth', { action: 'get_logs' });
+    allLogs = d.logs || [];
+    renderLogs(allLogs);
+  } catch (e) { toast('error', 'Failed to load logs', e.message); }
+}
+
+// ── USERS ──────────────────────────────────────
+function filterUsers() {
+  const q = document.getElementById('user-search').value.toLowerCase();
+  const f = document.getElementById('user-filter').value;
+  let users = allUsers.filter(u => {
+    const match = !q || u.username.toLowerCase().includes(q) || (u.displayName || '').toLowerCase().includes(q) || (u.email || '').toLowerCase().includes(q);
+    const status = f === 'all' || (f === 'active' && !u.banned) || (f === 'banned' && u.banned) || (f === 'admin' && u.role === 'admin');
+    return match && status;
+  });
+  renderUsers(users);
+}
+
+function renderUsers(users) {
+  const el = document.getElementById('users-list');
+  if (!users.length) { el.innerHTML = '<div class="empty"><span class="empty-emoji">👥</span><h3>No users</h3></div>'; return; }
+  el.innerHTML = users.map(u => `
+    <div class="user-row ${u.banned ? 'banned' : ''}">
+      <div class="av av-md">${u.avatarUrl ? `<img src="${u.avatarUrl}">` : (u.displayName || u.username).slice(0, 2).toUpperCase()}</div>
+      <div class="user-info">
+        <div class="user-name">${u.displayName || u.username} <span style="font-weight:400;color:var(--muted)">@${u.username}</span></div>
+        <div class="user-meta">
+          ${u.email || 'No email'} · Joined ${timeAgo(u.createdAt)}
+          ${u.banned ? ' · <span style="color:var(--danger)">⛔ Banned</span>' : ''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div>
+          <span class="badge ${u.role === 'admin' ? 'badge-gold' : 'badge-blue'}">${u.role}</span>
+          ${u.banned ? '<span class="badge badge-red" style="margin-left:4px">Banned</span>' : ''}
+        </div>
+        <div style="font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace">
+          ${allFiles.filter(f => f.uploadedBy === u.username && !f.trashed).length} files · ${fmtBytes(allFiles.filter(f => f.uploadedBy === u.username && !f.trashed).reduce((a, f) => a + (f.size || 0), 0))}
+        </div>
+      </div>
+      <div class="user-actions">
+        ${u.banned
+          ? `<button class="btn btn-success btn-xs" onclick="adminUser('${u.username}','unban')">✓ Unban</button>`
+          : `<button class="btn btn-danger btn-xs" onclick="adminUser('${u.username}','ban')">⛔ Ban</button>`}
+        ${u.role !== 'admin' ? `<button class="btn btn-secondary btn-xs" onclick="adminUser('${u.username}','make_admin')">↑ Admin</button>` : `<button class="btn btn-ghost btn-xs" onclick="adminUser('${u.username}','make_user')">↓ User</button>`}
+        <button class="btn btn-danger btn-xs" onclick="deleteUser('${u.username}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+async function adminUser(username, op) {
+  const labels = { ban: 'Ban', unban: 'Unban', make_admin: 'Make Admin', make_user: 'Make User' };
+  confirm2(`${labels[op]} @${username}?`, `This will ${op.replace('_', ' ')} the user.`, async () => {
+    try { await api('auth', { action: 'admin_user', target: username, op }); toast('success', `@${username} — ${op}`); loadAll(); }
+    catch (e) { toast('error', 'Failed', e.message); }
+  }, op === 'ban');
+}
+
+async function deleteUser(username) {
+  confirm2(`Delete @${username}?`, 'This permanently removes the user account. Cannot be undone.', async () => {
+    try { await api('auth', { action: 'admin_user', target: username, op: 'delete' }); toast('success', 'User deleted'); loadAll(); }
+    catch (e) { toast('error', 'Failed', e.message); }
+  });
+}
+
+// ── FILES ──────────────────────────────────────
+function filterFiles() {
+  const q = document.getElementById('file-search').value.toLowerCase();
+  const u = document.getElementById('file-user-filter').value;
+  const s = document.getElementById('file-sort').value;
+  let files = allFiles.filter(f => !f.trashed);
+  if (q) files = files.filter(f => (f.originalName || '').toLowerCase().includes(q));
+  if (u) files = files.filter(f => f.uploadedBy === u);
+  if (s === 'newest') files.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+  else if (s === 'oldest') files.sort((a, b) => new Date(a.uploadedAt) - new Date(b.uploadedAt));
+  else if (s === 'size') files.sort((a, b) => (b.size || 0) - (a.size || 0));
+  else if (s === 'downloads') files.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+  renderFiles2(files);
+}
+
+function renderFiles2(files) {
+  const el = document.getElementById('files-list');
+  if (!files.length) { el.innerHTML = '<div class="empty"><span class="empty-emoji">📭</span><h3>No files</h3></div>'; return; }
+  el.innerHTML = files.slice(0, 100).map(f => `
+    <div class="file-row-admin">
+      <div style="font-size:1.6rem;flex-shrink:0">${getIcon(f.originalName || '')}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${f.originalName}">${f.originalName}</div>
+        <div style="font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace;display:flex;gap:9px;flex-wrap:wrap;margin-top:2px">
+          <span>👤 ${f.uploadedBy}</span>
+          <span>${fmtBytes(f.size || 0)}</span>
+          <span>⬇️ ${f.downloads || 0}</span>
+          <span>${timeAgo(f.uploadedAt)}</span>
+          <span style="color:var(--accent3)">📌 ${displayPath(f)}</span>
+          ${f.expiresAt ? `<span style="color:var(--warn)">⏰ ${new Date(f.expiresAt).toLocaleDateString()}</span>` : ''}
+        </div>
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap">
+        <span class="${f.isPublic ? 'badge badge-green' : 'badge badge-gray'}">${f.isPublic ? 'Public' : 'Private'}</span>
+        ${f.rating?.avg ? `<span class="badge badge-gold">⭐ ${f.rating.avg}</span>` : ''}
+        <button class="btn btn-danger btn-xs" onclick="adminDeleteFile('${f.id}','${(f.originalName||'').replace(/'/g,"\\'")}')">🗑️</button>
+      </div>
+    </div>`).join('') + (files.length > 100 ? `<div style="text-align:center;padding:14px;color:var(--muted);font-size:.82rem">Showing 100 of ${files.length} files</div>` : '');
+}
+
+async function adminDeleteFile(id, name) {
+  confirm2('Delete "' + name + '"?', 'Move to Recycle Bin.', async () => {
+    try { await api('files', { action: 'delete', fileId: id, username: sess.username }); toast('success', 'Moved to bin'); loadAll(); }
+    catch (e) { toast('error', 'Failed', e.message); }
+  });
+}
+
+// ── TRASH ──────────────────────────────────────
+function renderTrash(files) {
+  const el = document.getElementById('trash-list');
+  if (!files.length) { el.innerHTML = '<div class="empty"><span class="empty-emoji">🗑️</span><h3>Recycle bin is empty</h3></div>'; return; }
+  el.innerHTML = files.map(f => `
+    <div class="file-row-admin" style="border-color:rgba(255,79,110,.2)">
+      <div style="font-size:1.6rem;flex-shrink:0">${getIcon(f.originalName || '')}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;font-size:.88rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.originalName}</div>
+        <div style="font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace;display:flex;gap:9px;flex-wrap:wrap;margin-top:2px">
+          <span>👤 ${f.uploadedBy}</span>
+          <span>${fmtBytes(f.size || 0)}</span>
+          <span>Deleted ${timeAgo(f.trashedAt)}</span>
+          <span style="color:var(--danger)">Reason: ${f.trashReason || 'user_delete'}</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-success btn-xs" onclick="restoreFile('${f.id}')">♻️ Restore</button>
+        <button class="btn btn-danger btn-xs" onclick="permDelete('${f.id}','${(f.originalName||'').replace(/'/g,"\\'")}')">💀 Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function restoreFile(id) {
+  try { await api('files', { action: 'restore', fileId: id }); toast('success', 'Restored!'); loadAll(); }
+  catch (e) { toast('error', 'Failed', e.message); }
+}
+
+async function permDelete(id, name) {
+  confirm2('Permanently delete "' + name + '"?', 'This removes the file from GitHub forever. Cannot be undone.', async () => {
+    try { await api('files', { action: 'permanent_delete', fileId: id, username: sess.username }); toast('success', 'Deleted forever'); loadAll(); }
+    catch (e) { toast('error', 'Failed', e.message); }
+  });
+}
+
+async function emptyTrash() {
+  const trashed = allFiles.filter(f => f.trashed);
+  if (!trashed.length) return toast('info', 'Recycle bin is already empty');
+  confirm2('Empty Recycle Bin?', `Permanently delete all ${trashed.length} trashed files from GitHub. This cannot be undone.`, async () => {
+    let done = 0;
+    for (const f of trashed) {
+      try { await api('files', { action: 'permanent_delete', fileId: f.id, username: sess.username }); done++; }
+      catch {}
+    }
+    toast('success', `Deleted ${done} files permanently`); loadAll();
+  });
+}
+
+// ── LOGS ──────────────────────────────────────
+function filterLogs() {
+  const q = document.getElementById('log-search').value.toLowerCase();
+  const t = document.getElementById('log-type-filter').value;
+  const logs = allLogs.filter(l => {
+    const match = !q || (l.username || '').toLowerCase().includes(q) || (l.fileName || '').toLowerCase().includes(q) || (l.detail || '').toLowerCase().includes(q);
+    const typeMatch = !t || (l.type || '').includes(t);
+    return match && typeMatch;
+  });
+  renderLogs(logs);
+}
+
+function logTypeClass(type) {
+  if (type === 'upload') return 'log-upload';
+  if (type.includes('delete')) return 'log-delete';
+  if (type === 'login') return 'log-login';
+  if (type === 'register') return 'log-register';
+  if (type === 'rename') return 'log-rename';
+  return 'log-other';
+}
+
+function renderLogs(logs) {
+  const el = document.getElementById('logs-table');
+  if (!logs.length) { el.innerHTML = '<div class="log-empty">No log entries found</div>'; return; }
+  el.innerHTML = `
+    <table class="data-table" style="width:100%">
+      <thead><tr><th>Type</th><th>User</th><th>Details</th><th>File</th><th>Size</th><th>Time</th></tr></thead>
+      <tbody>
+        ${logs.slice(0, 200).map(l => `<tr>
+          <td><span class="log-type ${logTypeClass(l.type)}">${l.type}</span></td>
+          <td><div style="display:flex;align-items:center;gap:6px"><div class="av av-xs">${(l.username||'?').slice(0,2).toUpperCase()}</div>${l.username || '—'}</div></td>
+          <td style="color:var(--text2);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.detail || l.fileName || '—'}</td>
+          <td style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--accent3);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.filePath ? '📌 ' + l.filePath.replace('uploads/', '') : '—'}</td>
+          <td style="font-family:'DM Mono',monospace;font-size:.72rem">${l.fileSize ? fmtBytes(l.fileSize) : '—'}</td>
+          <td style="font-family:'DM Mono',monospace;font-size:.72rem;white-space:nowrap;color:var(--muted)">${fmtDate(l.at)}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    ${logs.length > 200 ? `<div style="text-align:center;padding:12px;color:var(--muted);font-size:.8rem">Showing 200 of ${logs.length} logs</div>` : ''}`;
+}
+
+loadAll();
+setInterval(() => loadAll(), 60000);
+</script>
+</body>
+</html>

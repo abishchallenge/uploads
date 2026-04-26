@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FileVault — Public Files</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.hero{text-align:center;padding:44px 0 40px}
+.hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.8rem,5vw,3rem);line-height:1.08;letter-spacing:-.03em;margin-bottom:12px}
+.hero h1 .g{background:linear-gradient(135deg,var(--accent),var(--accent2) 55%,var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--text2);font-size:.95rem;max-width:400px;margin:0 auto}
+/* FILTERS */
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+.filters .search-box{flex:1;min-width:200px}
+/* FILE GRID */
+.pub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+@media(max-width:480px){.pub-grid{grid-template-columns:1fr 1fr}}
+.pub-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;transition:var(--t);cursor:pointer;position:relative}
+.pub-card:hover{border-color:rgba(79,139,255,.35);transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.pub-thumb{width:100%;height:110px;object-fit:cover;display:block;background:var(--surface2)}
+.pub-icon-wrap{width:100%;height:110px;display:flex;align-items:center;justify-content:center;background:var(--surface2);font-size:3.2rem}
+.pub-body{padding:13px 13px 11px}
+.pub-name{font-weight:600;font-size:.84rem;margin-bottom:5px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-all;line-height:1.3}
+.pub-meta{font-family:'DM Mono',monospace;font-size:.67rem;color:var(--muted);display:flex;gap:7px;flex-wrap:wrap}
+.pub-uploader{display:flex;align-items:center;gap:5px;margin-top:6px;font-size:.75rem;color:var(--text2)}
+.pub-stars{display:flex;gap:2px;margin-top:6px}
+.pub-star{font-size:11px;color:var(--muted)}
+.pub-star.on{color:var(--gold)}
+.pub-badge{position:absolute;top:8px;left:8px}
+/* TOP SECTION */
+.top-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;margin-bottom:24px}
+.top-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.top-item{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid var(--border)}
+.top-item:last-child{border-bottom:none}
+.top-rank{font-family:'DM Mono',monospace;font-weight:700;font-size:.8rem;width:20px;text-align:center;flex-shrink:0}
+.top-rank.gold{color:var(--gold)}
+.top-rank.silver{color:#b8b8b8}
+.top-rank.bronze{color:#cd7f32}
+/* FILE DETAIL */
+.detail-comments{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.comment-item{background:var(--surface3);border-radius:var(--r-sm);padding:9px 12px}
+.comment-hd{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.comment-text{font-size:.83rem;color:var(--text2)}
+</style>
+</head>
+<body>
+<div class="bg-canvas"><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div><div class="bg-orb bg-orb-3"></div><div class="bg-grid"></div></div>
+<header class="site-header"><div class="header-inner"></div></header>
+
+<div class="wrapper page-body">
+  <div class="hero au">
+    <div style="display:inline-flex;align-items:center;gap:7px;padding:5px 14px 5px 8px;border-radius:99px;border:1px solid rgba(79,139,255,.22);background:rgba(79,139,255,.06);font-size:.71rem;font-family:'DM Mono',monospace;color:var(--accent);margin-bottom:20px"><div class="pdot"></div> Public Vault</div>
+    <h1>Browse <span class="g">Public Files</span></h1>
+    <p>Files shared publicly by the FileVault community. No sign-in required.</p>
+  </div>
+
+  <!-- TOP SECTION -->
+  <div class="grid-2" style="gap:16px;margin-bottom:24px" id="top-section">
+    <div class="top-section au" style="animation-delay:.05s">
+      <div class="top-title">🔥 Top Downloads</div>
+      <div id="top-downloads"><div class="skeleton" style="height:100px"></div></div>
+    </div>
+    <div class="top-section au" style="animation-delay:.08s">
+      <div class="top-title">⭐ Top Rated</div>
+      <div id="top-rated"><div class="skeleton" style="height:100px"></div></div>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters au" style="animation-delay:.1s">
+    <div class="search-box"><span class="s-icon">🔍</span><input class="input" id="pub-search" placeholder="Search public files…" oninput="applyFilter()"></div>
+    <div class="tab-bar" id="type-tabs">
+      <div class="tab-pill active" onclick="setType('all',this)">🗂️ All</div>
+      <div class="tab-pill" onclick="setType('Images',this)">🖼️ Images</div>
+      <div class="tab-pill" onclick="setType('Videos',this)">🎬 Videos</div>
+      <div class="tab-pill" onclick="setType('Audio',this)">🎵 Audio</div>
+      <div class="tab-pill" onclick="setType('Docs',this)">📄 Docs</div>
+      <div class="tab-pill" onclick="setType('Code',this)">💻 Code</div>
+      <div class="tab-pill" onclick="setType('Archives',this)">📦 Archives</div>
+    </div>
+    <select class="input select" id="pub-sort" style="width:auto;flex-shrink:0" onchange="applyFilter()">
+      <option value="newest">Newest</option>
+      <option value="downloads">Most Downloaded</option>
+      <option value="rating">Top Rated</option>
+      <option value="name">Name A–Z</option>
+    </select>
+  </div>
+
+  <div id="count-bar" style="font-size:.78rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:12px"></div>
+  <div id="pub-files"><div class="pub-grid">${'<div class="skeleton" style="height:200px"></div>'.repeat(8)}</div></div>
+</div>
+
+<!-- FILE DETAIL MODAL -->
+<div class="modal-overlay" id="pub-detail-modal">
+  <div class="modal-box" style="max-width:580px">
+    <div class="modal-header">
+      <div class="modal-title" id="pd-title" style="word-break:break-all;font-size:.9rem">File</div>
+      <button class="modal-close" onclick="closeModal('pub-detail-modal')">✕</button>
+    </div>
+    <div class="modal-body" id="pd-body"></div>
+  </div>
+</div>
+
+<div id="toast-root"></div>
+<script src="vault.js"></script>
+<script>
+buildHeader('public.html');
+const sess = Auth.get();
+let pubFiles = [], activeType = 'all', searchQ = '';
+
+async function loadPublic() {
+  try {
+    const d = await api('files?public=true', null, 'GET');
+    pubFiles = (d.files || []).filter(f => f.isPublic && !f.trashed);
+    renderTopDownloads();
+    renderTopRated();
+    applyFilter();
+  } catch (e) {
+    document.getElementById('pub-files').innerHTML = `<div class="empty"><span class="empty-emoji">⚠️</span><h3>Failed to load</h3><p>${e.message}</p><button class="btn btn-secondary btn-sm" onclick="loadPublic()">Retry</button></div>`;
+  }
+}
+
+function renderTopDownloads() {
+  const top = [...pubFiles].sort((a, b) => (b.downloads || 0) - (a.downloads || 0)).slice(0, 5);
+  const el = document.getElementById('top-downloads');
+  if (!top.length) { el.innerHTML = '<div style="color:var(--muted);font-size:.84rem;padding:8px">No downloads yet</div>'; return; }
+  el.innerHTML = top.map((f, i) => `
+    <div class="top-item" onclick="openDetail('${f.id}')" style="cursor:pointer">
+      <span class="top-rank ${i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : ''}">${i + 1}</span>
+      <span style="font-size:1.3rem">${getIcon(f.originalName || '')}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:.82rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.originalName}</div><div style="font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace">${f.downloadsByVal || f.downloads || 0} downloads · ${fmtBytes(f.size || 0)}</div></div>
+      <span class="badge badge-blue">⬇️ ${f.downloads || 0}</span>
+    </div>`).join('');
+}
+
+function renderTopRated() {
+  const top = [...pubFiles].filter(f => f.rating?.count > 0).sort((a, b) => (b.rating?.avg || 0) - (a.rating?.avg || 0)).slice(0, 5);
+  const el = document.getElementById('top-rated');
+  if (!top.length) { el.innerHTML = '<div style="color:var(--muted);font-size:.84rem;padding:8px">No ratings yet</div>'; return; }
+  el.innerHTML = top.map((f, i) => `
+    <div class="top-item" onclick="openDetail('${f.id}')" style="cursor:pointer">
+      <span class="top-rank ${i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : ''}">${i + 1}</span>
+      <span style="font-size:1.3rem">${getIcon(f.originalName || '')}</span>
+      <div style="flex:1;min-width:0"><div style="font-size:.82rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.originalName}</div><div style="font-size:.68rem;color:var(--muted);font-family:'DM Mono',monospace">${f.rating.count} votes · ${fmtBytes(f.size || 0)}</div></div>
+      <span class="badge badge-gold">⭐ ${f.rating.avg}</span>
+    </div>`).join('');
+}
+
+function setType(t, el) {
+  activeType = t;
+  document.querySelectorAll('.tab-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  applyFilter();
+}
+
+function applyFilter() {
+  searchQ = document.getElementById('pub-search').value.toLowerCase();
+  const sort = document.getElementById('pub-sort').value;
+  let files = [...pubFiles];
+  if (activeType !== 'all') files = files.filter(f => getGroup(f.originalName || '') === activeType);
+  if (searchQ) files = files.filter(f => (f.originalName || '').toLowerCase().includes(searchQ));
+  if (sort === 'newest') files.sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+  else if (sort === 'downloads') files.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+  else if (sort === 'rating') files.sort((a, b) => (b.rating?.avg || 0) - (a.rating?.avg || 0));
+  else if (sort === 'name') files.sort((a, b) => (a.originalName || '').localeCompare(b.originalName || ''));
+  document.getElementById('count-bar').textContent = `${files.length} file${files.length !== 1 ? 's' : ''} found`;
+  renderPubFiles(files);
+}
+
+function renderPubFiles(files) {
+  const el = document.getElementById('pub-files');
+  if (!files.length) { el.innerHTML = `<div class="empty"><span class="empty-emoji">🔍</span><h3>No files found</h3><p>Try changing the search or filter</p></div>`; return; }
+  el.innerHTML = `<div class="pub-grid">${files.map(f => pubCard(f)).join('')}</div>`;
+  files.forEach(f => {
+    document.querySelector(`[data-pub-id="${f.id}"]`)?.addEventListener('click', () => openDetail(f.id));
+  });
+}
+
+function pubCard(f) {
+  const name = f.originalName || '';
+  const isNew = Date.now() - new Date(f.uploadedAt) < 86400000 * 3;
+  return `<div class="pub-card" data-pub-id="${f.id}">
+    ${isNew ? '<div class="pub-badge"><span class="badge badge-teal">New</span></div>' : ''}
+    ${isImage(name) && f.rawUrl ? `<img class="pub-thumb" src="${f.rawUrl}" loading="lazy" onerror="this.outerHTML='<div class=pub-icon-wrap>${getIcon(name)}</div>'">` : `<div class="pub-icon-wrap">${getIcon(name)}</div>`}
+    <div class="pub-body">
+      <div class="pub-name" title="${name}">${name}</div>
+      <div class="pub-meta">
+        <span>${fmtBytes(f.size || 0)}</span>
+        <span>⬇️ ${f.downloads || 0}</span>
+        ${f.rating?.avg ? `<span>⭐ ${f.rating.avg}</span>` : ''}
+      </div>
+      <div class="pub-uploader">
+        <div class="av av-xs">${(f.uploadedBy || '?').slice(0, 2).toUpperCase()}</div>
+        <span>${f.uploadedBy || 'anon'}</span>
+        <span style="margin-left:auto;color:var(--muted)">${timeAgo(f.uploadedAt)}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function openDetail(id) {
+  const f = pubFiles.find(x => x.id === id);
+  if (!f) return;
+  document.getElementById('pd-title').textContent = f.originalName || 'File';
+  const body = document.getElementById('pd-body');
+  const userRating = f.ratedBy?.[sess?.username] || 0;
+
+  // Get raw URL for preview
+  let rawUrl = null;
+  try { const d = await api('files', { action: 'get_raw_url', fileId: id }); rawUrl = d.rawUrl; } catch {}
+
+  body.innerHTML = `
+    <div style="margin-bottom:14px">
+      ${rawUrl && isImage(f.originalName||'') ? `<img src="${rawUrl}" style="width:100%;max-height:280px;object-fit:contain;border-radius:var(--r);background:var(--surface)">` :
+        rawUrl && isVideo(f.originalName||'') ? `<video src="${rawUrl}" controls style="width:100%;border-radius:var(--r)"></video>` :
+        rawUrl && isAudio(f.originalName||'') ? `<div style="text-align:center;padding:24px"><div style="font-size:4rem">🎵</div><audio src="${rawUrl}" controls style="width:100%;margin-top:12px"></audio></div>` :
+        `<div style="text-align:center;padding:32px;font-size:4rem">${getIcon(f.originalName||'')}</div>`}
+    </div>
+    <div class="grid-2" style="gap:10px;margin-bottom:16px;font-size:.84rem">
+      <div><span class="label">Size</span>${fmtBytes(f.size||0)}</div>
+      <div><span class="label">Type</span>${getExt(f.originalName||'').toUpperCase()||'?'}</div>
+      <div><span class="label">Uploaded by</span>${f.uploadedBy}</div>
+      <div><span class="label">Date</span>${fmtDate(f.uploadedAt)}</div>
+      <div><span class="label">Downloads</span>${f.downloads||0}</div>
+      <div><span class="label">Path</span><span style="font-family:'DM Mono',monospace;font-size:.72rem;color:var(--accent3)">${displayPath(f)}</span></div>
+    </div>
+    <div class="divider"></div>
+    <div style="margin-bottom:14px">
+      <span class="label" style="display:block;margin-bottom:7px">Rate this file (${f.rating?.count||0} votes · avg ${f.rating?.avg||0}★)</span>
+      <div class="stars" id="pub-stars">
+        ${[1,2,3,4,5].map(i => `<span class="star ${i<=userRating?'on':''}" onclick="${sess?`pubRate('${f.id}',${i})`:'toast(\"warn\",\"Sign in to rate\")'}">★</span>`).join('')}
+      </div>
+      ${!sess ? '<div style="font-size:.75rem;color:var(--muted);margin-top:5px">Sign in to rate</div>' : ''}
+    </div>
+    <div class="divider"></div>
+    <div>
+      <span class="label" style="display:block;margin-bottom:9px">Comments (${(f.comments||[]).length})</span>
+      <div class="detail-comments">
+        ${(f.comments||[]).length ? f.comments.map(c=>`<div class="comment-item"><div class="comment-hd"><div class="av av-xs">${c.username.slice(0,2).toUpperCase()}</div><strong style="font-size:.8rem">${c.username}</strong><span style="font-size:.68rem;color:var(--muted);margin-left:auto">${timeAgo(c.at)}</span></div><p class="comment-text">${c.text}</p></div>`).join('') : '<div style="color:var(--muted);font-size:.84rem">No comments yet. Be the first!</div>'}
+      </div>
+      ${sess ? `<div style="display:flex;gap:8px"><input class="input" id="pub-cmt-inp" placeholder="Add a comment…" style="flex:1"><button class="btn btn-primary btn-sm" onclick="pubComment('${f.id}')">Post</button></div>` : '<div style="font-size:.8rem;color:var(--muted)"><a href="login.html" style="color:var(--accent)">Sign in</a> to comment</div>'}
+    </div>
+    <div class="divider"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${rawUrl ? `<a class="btn btn-primary btn-sm" href="${rawUrl}" target="_blank" onclick="trackDownload('${f.id}')">⬇️ Download</a>` : ''}
+      ${sess ? `<button class="btn btn-ghost btn-sm" onclick="pubFav('${f.id}')">${(f.favouritedBy||[]).includes(sess.username)?'⭐ Unfavourite':'☆ Favourite'}</button>` : ''}
+    </div>`;
+  openModal('pub-detail-modal');
+}
+
+async function pubRate(fileId, stars) {
+  if (!sess) return toast('warn', 'Sign in to rate');
+  try { await api('files', { action: 'rate', fileId, stars, username: sess.username }); toast('success', `Rated ${stars}★`); loadPublic(); closeModal('pub-detail-modal'); }
+  catch (e) { toast('error', 'Failed', e.message); }
+}
+
+async function pubComment(fileId) {
+  const inp = document.getElementById('pub-cmt-inp');
+  const text = inp.value.trim(); if (!text) return;
+  if (!sess) return toast('warn', 'Sign in to comment');
+  try { await api('files', { action: 'comment', fileId, text, username: sess.username }); inp.value = ''; closeModal('pub-detail-modal'); toast('success', 'Comment posted!'); loadPublic(); }
+  catch (e) { toast('error', 'Failed', e.message); }
+}
+
+async function pubFav(fileId) {
+  if (!sess) return toast('warn', 'Sign in to favourite');
+  try { await api('files', { action: 'favourite', fileId, username: sess.username }); closeModal('pub-detail-modal'); loadPublic(); }
+  catch (e) { toast('error', 'Failed', e.message); }
+}
+
+async function trackDownload(fileId) {
+  try { await api('files', { action: 'downloaded', fileId }); } catch {}
+}
+
+loadPublic();
+</script>
+</body>
+</html>

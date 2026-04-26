@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FileVault — Account Settings</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.acc-layout{display:grid;grid-template-columns:240px 1fr;gap:22px;align-items:start}
+@media(max-width:768px){.acc-layout{grid-template-columns:1fr}}
+.acc-nav{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px;position:sticky;top:calc(var(--header-h)+14px)}
+.acc-nav-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--r-sm);cursor:pointer;transition:var(--t);font-size:.86rem;color:var(--text2)}
+.acc-nav-item:hover{background:var(--surface2);color:var(--text)}
+.acc-nav-item.active{background:rgba(79,139,255,.1);color:var(--accent)}
+.section-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;margin-bottom:16px;display:none}
+.section-card.active{display:block}
+.section-card h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:4px}
+.section-card .desc{color:var(--text2);font-size:.84rem;margin-bottom:22px}
+/* AVATAR */
+.avatar-edit{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.av-preview{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:1.8rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;flex-shrink:0;overflow:hidden;border:3px solid var(--border2)}
+.av-preview img{width:100%;height:100%;object-fit:cover}
+.av-controls{display:flex;flex-direction:column;gap:8px}
+/* DANGER ZONE */
+.danger-zone{background:rgba(255,79,110,.04);border:1px solid rgba(255,79,110,.2);border-radius:var(--r-lg);padding:22px}
+.danger-zone h3{color:var(--danger);font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px}
+.danger-zone p{color:var(--text2);font-size:.84rem;margin-bottom:16px}
+/* UPLOAD HISTORY */
+.hist-item{display:flex;align-items:center;gap:11px;padding:10px 12px;background:var(--surface2);border-radius:var(--r-sm);margin-bottom:8px}
+.hist-icon{font-size:1.4rem;flex-shrink:0}
+.hist-info{flex:1;min-width:0}
+.hist-name{font-size:.86rem;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist-meta{font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace}
+/* STORAGE BAR */
+.storage-bar{background:var(--surface2);border-radius:99px;height:8px;overflow:hidden;margin:10px 0}
+.storage-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s ease}
+/* SUCCESS FLASH */
+.save-success{background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.25);border-radius:var(--r-sm);padding:9px 13px;font-size:.83rem;color:var(--success);display:none;margin-top:10px}
+.save-success.show{display:block}
+/* PASSWORD STRENGTH */
+.str-bar{height:3px;border-radius:99px;background:var(--surface3);margin-top:5px;overflow:hidden}
+.str-fill{height:100%;border-radius:99px;width:0;transition:width .3s,background .3s}
+</style>
+</head>
+<body>
+<div class="bg-canvas"><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div><div class="bg-grid"></div></div>
+<header class="site-header"><div class="header-inner"></div></header>
+
+<div class="wrapper page-body">
+  <div class="section-head au" style="margin-bottom:22px">
+    <div>
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;letter-spacing:-.025em">Account Settings</h2>
+      <p style="color:var(--text2);font-size:.86rem;margin-top:3px">Manage your profile, security and preferences</p>
+    </div>
+  </div>
+
+  <div class="acc-layout au" style="animation-delay:.05s">
+    <!-- NAV -->
+    <nav class="acc-nav">
+      <div class="acc-nav-item active" onclick="showSection('profile')">👤 Profile</div>
+      <div class="acc-nav-item" onclick="showSection('security')">🔑 Security</div>
+      <div class="acc-nav-item" onclick="showSection('storage')">📦 Storage</div>
+      <div class="acc-nav-item" onclick="showSection('history')">📋 Upload History</div>
+      <div class="acc-nav-item" onclick="showSection('danger')" style="color:var(--danger)">⚠️ Danger Zone</div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div>
+      <!-- PROFILE -->
+      <div class="section-card active" id="sec-profile">
+        <h3>Profile Information</h3>
+        <p class="desc">Update your display name, bio and avatar</p>
+
+        <div class="avatar-edit">
+          <div class="av-preview" id="av-big"></div>
+          <div class="av-controls">
+            <div style="font-size:.82rem;color:var(--text2);margin-bottom:4px">Profile Picture</div>
+            <label class="btn btn-secondary btn-sm" style="cursor:pointer">
+              📷 Upload Photo
+              <input type="file" id="av-file" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
+            </label>
+            <button class="btn btn-ghost btn-sm" onclick="removeAvatar()">✕ Remove</button>
+            <div style="font-size:.71rem;color:var(--muted)">Max 2MB · JPG, PNG, GIF, WebP</div>
+          </div>
+        </div>
+
+        <div class="form-row form-row-2">
+          <div class="form-group"><label class="label">Display Name</label><div class="input-wrap"><span class="i-icon">✨</span><input class="input" id="p-dn" placeholder="Your Name"></div></div>
+          <div class="form-group"><label class="label">Email (optional)</label><div class="input-wrap"><span class="i-icon">📧</span><input class="input" id="p-email" type="email" placeholder="you@example.com"></div></div>
+        </div>
+        <div class="form-group"><label class="label">Bio</label><textarea class="input textarea" id="p-bio" placeholder="Tell us about yourself…" rows="3"></textarea></div>
+        <div class="form-group"><label class="label">Username</label><div class="input-wrap"><span class="i-icon">@</span><input class="input" id="p-username" placeholder="username" disabled style="opacity:.5;cursor:not-allowed"></div><div style="font-size:.73rem;color:var(--muted);margin-top:4px">To change username, go to Security tab</div></div>
+
+        <button class="btn btn-primary" id="p-save" onclick="saveProfile()">💾 Save Changes</button>
+        <div class="save-success" id="p-ok">✓ Profile updated successfully!</div>
+      </div>
+
+      <!-- SECURITY -->
+      <div class="section-card" id="sec-security">
+        <h3>Security Settings</h3>
+        <p class="desc">Change username or password</p>
+
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:20px">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:14px">Change Username</div>
+          <div class="form-group"><label class="label">New Username</label><div class="input-wrap"><span class="i-icon">@</span><input class="input" id="s-newuser" placeholder="new_username"></div></div>
+          <div class="form-group"><label class="label">Current Password (to confirm)</label><div class="input-wrap"><span class="i-icon">🔑</span><input class="input" id="s-pwforuser" type="password" placeholder="Enter current password"></div></div>
+          <button class="btn btn-secondary btn-sm" onclick="changeUsername()">Change Username</button>
+          <div class="save-success" id="user-ok">✓ Username changed! You've been signed out.</div>
+        </div>
+
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:18px">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:14px">Change Password</div>
+          <div class="form-group"><label class="label">Current Password</label><div class="input-wrap"><span class="i-icon">🔑</span><input class="input" id="s-curpw" type="password" placeholder="Current password"></div></div>
+          <div class="form-group"><label class="label">New Password</label><div class="input-wrap"><span class="i-icon">🔒</span><input class="input" id="s-newpw" type="password" placeholder="Min 6 characters" oninput="strBar(this.value)"></div><div class="str-bar"><div class="str-fill" id="str-fill2"></div></div></div>
+          <div class="form-group"><label class="label">Confirm New Password</label><div class="input-wrap"><span class="i-icon">🔒</span><input class="input" id="s-conpw" type="password" placeholder="Repeat new password"></div></div>
+          <button class="btn btn-primary btn-sm" onclick="changePassword()">🔑 Change Password</button>
+          <div class="save-success" id="pw-ok">✓ Password changed successfully!</div>
+        </div>
+      </div>
+
+      <!-- STORAGE -->
+      <div class="section-card" id="sec-storage">
+        <h3>Storage Usage</h3>
+        <p class="desc">Your personal file storage breakdown</p>
+        <div id="storage-content"><div class="skeleton" style="height:120px"></div></div>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="section-card" id="sec-history">
+        <h3>Upload History</h3>
+        <p class="desc">All files you've uploaded to FileVault</p>
+        <div id="hist-content"><div class="skeleton" style="height:200px"></div></div>
+      </div>
+
+      <!-- DANGER -->
+      <div class="section-card" id="sec-danger">
+        <div class="danger-zone">
+          <h3>⚠️ Delete Account</h3>
+          <p>Permanently delete your account and all associated data. This action <strong>cannot be undone</strong>. Your uploaded files will remain in the repository but your account will be gone.</p>
+          <div class="form-group"><label class="label">Type your password to confirm</label><div class="input-wrap"><span class="i-icon">🔑</span><input class="input" id="del-pw" type="password" placeholder="Enter your password"></div></div>
+          <button class="btn btn-danger" onclick="deleteAccount()">💀 Delete My Account Forever</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-root"></div>
+<script src="vault.js"></script>
+<script>
+Auth.guard();
+const sess = Auth.get();
+buildHeader('account.html');
+
+// ── INIT ──────────────────────────────────────
+function showSection(id) {
+  document.querySelectorAll('.section-card').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.acc-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + id)?.classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (id === 'storage') loadStorage();
+  if (id === 'history') loadHistory();
+}
+
+function renderAvatar(user) {
+  const el = document.getElementById('av-big');
+  if (user.avatarUrl) {
+    el.innerHTML = `<img src="${user.avatarUrl}">`;
+  } else {
+    el.textContent = (user.displayName || user.username).slice(0, 2).toUpperCase();
+    el.innerHTML = `<span>${(user.displayName || user.username).slice(0, 2).toUpperCase()}</span>`;
+  }
+}
+
+function fillForm(user) {
+  document.getElementById('p-dn').value = user.displayName || '';
+  document.getElementById('p-email').value = user.email || '';
+  document.getElementById('p-bio').value = user.bio || '';
+  document.getElementById('p-username').value = user.username || '';
+  renderAvatar(user);
+}
+fillForm(sess);
+
+// ── AVATAR UPLOAD ─────────────────────────────
+function handleAvatarUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) return toast('error', 'Image too large', 'Max 2MB');
+  const reader = new FileReader();
+  reader.onload = e => {
+    sess.avatarUrl = e.target.result;
+    Auth.set(sess);
+    renderAvatar(sess);
+    document.getElementById('hdr-av').innerHTML = `<img src="${e.target.result}">`;
+    toast('success', 'Avatar updated (save to keep)');
+  };
+  reader.readAsDataURL(file);
+}
+function removeAvatar() {
+  sess.avatarUrl = null;
+  Auth.set(sess);
+  renderAvatar(sess);
+  const hav = document.getElementById('hdr-av');
+  if (hav) hav.textContent = (sess.displayName || sess.username).slice(0, 2).toUpperCase();
+  toast('info', 'Avatar removed');
+}
+
+// ── SAVE PROFILE ──────────────────────────────
+async function saveProfile() {
+  const btn = document.getElementById('p-save');
+  btn.disabled = true; btn.textContent = '⏳ Saving…';
+  try {
+    const d = await api('auth', {
+      action: 'update_profile',
+      username: sess.username,
+      displayName: document.getElementById('p-dn').value.trim(),
+      email: document.getElementById('p-email').value.trim(),
+      bio: document.getElementById('p-bio').value.trim(),
+      avatarUrl: sess.avatarUrl || null,
+    });
+    Auth.set({ ...sess, ...d.user });
+    buildHeader('account.html');
+    document.getElementById('p-ok').classList.add('show');
+    setTimeout(() => document.getElementById('p-ok').classList.remove('show'), 3000);
+    toast('success', 'Profile saved!');
+  } catch (e) { toast('error', 'Failed', e.message); }
+  btn.disabled = false; btn.textContent = '💾 Save Changes';
+}
+
+// ── CHANGE USERNAME ───────────────────────────
+async function changeUsername() {
+  const newUser = document.getElementById('s-newuser').value.trim();
+  const pw = document.getElementById('s-pwforuser').value;
+  if (!newUser || !pw) return toast('warn', 'Fill all fields');
+  try {
+    const d = await api('auth', { action: 'update_profile', username: sess.username, newUsername: newUser, currentPassword: pw });
+    document.getElementById('user-ok').classList.add('show');
+    toast('success', 'Username changed! Signing you out…');
+    setTimeout(() => { Auth.clear(); location.href = 'login.html'; }, 1800);
+  } catch (e) { toast('error', 'Failed', e.message); }
+}
+
+// ── CHANGE PASSWORD ───────────────────────────
+function strBar(pw) {
+  let s = 0;
+  if (pw.length >= 6) s++; if (pw.length >= 10) s++;
+  if (/[A-Z]/.test(pw)) s++; if (/[0-9]/.test(pw)) s++; if (/[^a-zA-Z0-9]/.test(pw)) s++;
+  const c = ['', '#ff4f6e', '#ffb547', '#4f8bff', '#00e5a0', '#00e5a0'];
+  const f = document.getElementById('str-fill2');
+  f.style.width = (s * 20) + '%'; f.style.background = c[s];
+}
+async function changePassword() {
+  const cur = document.getElementById('s-curpw').value;
+  const np = document.getElementById('s-newpw').value;
+  const cp = document.getElementById('s-conpw').value;
+  if (!cur || !np) return toast('warn', 'Fill all fields');
+  if (np !== cp) return toast('error', 'Passwords do not match');
+  if (np.length < 6) return toast('error', 'Password must be 6+ characters');
+  try {
+    await api('auth', { action: 'update_profile', username: sess.username, currentPassword: cur, newPassword: np });
+    document.getElementById('pw-ok').classList.add('show');
+    setTimeout(() => document.getElementById('pw-ok').classList.remove('show'), 3000);
+    document.getElementById('s-curpw').value = '';
+    document.getElementById('s-newpw').value = '';
+    document.getElementById('s-conpw').value = '';
+    toast('success', 'Password changed!');
+  } catch (e) { toast('error', 'Failed', e.message); }
+}
+
+// ── STORAGE ───────────────────────────────────
+async function loadStorage() {
+  const el = document.getElementById('storage-content');
+  try {
+    const d = await api('files', null, 'GET');
+    const myFiles = (d.files || []).filter(f => f.uploadedBy === sess.username && !f.trashed);
+    const totalSize = myFiles.reduce((a, f) => a + (f.size || 0), 0);
+    const groups = {};
+    myFiles.forEach(f => { const g = getGroup(f.originalName || ''); groups[g] = (groups[g] || 0) + (f.size || 0); });
+    const pct = Math.min(100, Math.round(totalSize / (500 * 1024 * 1024) * 100));
+    el.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
+        <span style="font-size:.86rem;color:var(--text2)">Used: <strong style="color:var(--text)">${fmtBytes(totalSize)}</strong></span>
+        <span style="font-size:.78rem;color:var(--muted)">of 500 MB</span>
+      </div>
+      <div class="storage-bar"><div class="storage-fill" style="width:${pct}%"></div></div>
+      <div style="font-size:.72rem;color:var(--muted);margin-bottom:18px">${pct}% used · ${myFiles.length} files</div>
+      <div class="grid-3" style="gap:10px">
+        ${Object.entries(groups).sort((a,b)=>b[1]-a[1]).map(([g,sz])=>`
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+            <div style="font-size:1.2rem;margin-bottom:5px">${{Images:'🖼️',Videos:'🎬',Audio:'🎵',Docs:'📄',Code:'💻',Archives:'📦',Other:'📎'}[g]||'📎'}</div>
+            <div style="font-weight:600;font-size:.86rem">${g}</div>
+            <div style="font-size:.72rem;color:var(--muted);font-family:'DM Mono',monospace">${fmtBytes(sz)}</div>
+          </div>`).join('')}
+      </div>`;
+  } catch (e) { el.innerHTML = `<div style="color:var(--danger);font-size:.84rem">Failed to load: ${e.message}</div>`; }
+}
+
+// ── HISTORY ───────────────────────────────────
+async function loadHistory() {
+  const el = document.getElementById('hist-content');
+  try {
+    const d = await api('files', null, 'GET');
+    const myFiles = (d.files || []).filter(f => f.uploadedBy === sess.username).sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+    if (!myFiles.length) { el.innerHTML = `<div class="empty"><span class="empty-emoji">📭</span><h3>No uploads yet</h3></div>`; return; }
+    el.innerHTML = `
+      <div style="margin-bottom:10px;font-size:.8rem;color:var(--muted)">${myFiles.length} total uploads</div>
+      ${myFiles.slice(0, 50).map(f => `
+        <div class="hist-item">
+          <div class="hist-icon">${getIcon(f.originalName || '')}</div>
+          <div class="hist-info">
+            <div class="hist-name">${f.originalName || f.storedName}</div>
+            <div class="hist-meta">${fmtBytes(f.size||0)} · ${fmtDate(f.uploadedAt)} · ${f.folder ? '📁 '+f.folder : 'Root'} · ⬇️ ${f.downloads||0}</div>
+            <div style="font-size:.67rem;color:var(--accent3);font-family:'DM Mono',monospace">📌 ${displayPath(f)}</div>
+          </div>
+          <span class="${f.trashed ? 'badge badge-red' : f.isPublic ? 'badge badge-green' : 'badge badge-gray'}">${f.trashed ? 'Trashed' : f.isPublic ? 'Public' : 'Private'}</span>
+        </div>`).join('')}
+      ${myFiles.length > 50 ? `<div style="text-align:center;padding:12px;font-size:.8rem;color:var(--muted)">Showing first 50 of ${myFiles.length}</div>` : ''}`;
+  } catch (e) { el.innerHTML = `<div style="color:var(--danger)">Failed: ${e.message}</div>`; }
+}
+
+// ── DELETE ACCOUNT ────────────────────────────
+async function deleteAccount() {
+  const pw = document.getElementById('del-pw').value;
+  if (!pw) return toast('warn', 'Enter your password to confirm');
+  confirm2('Delete account forever?', 'All your account data will be permanently removed. Files stay in the repo but your account is gone.', async () => {
+    try {
+      await api('auth', { action: 'delete_account', username: sess.username, password: pw });
+      Auth.clear();
+      toast('success', 'Account deleted');
+      setTimeout(() => location.href = 'login.html', 1200);
+    } catch (e) { toast('error', 'Failed', e.message); }
+  });
+}
+</script>
+</body>
+</html>
