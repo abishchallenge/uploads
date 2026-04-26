@@ -47,7 +47,14 @@
         "count": 0,
         "total": 0
       },
-      "comments": [],
+      "comments": [
+        {
+          "id": "mofwdcqq",
+          "username": "abish",
+          "text": "Nice Picture",
+          "at": "2026-04-26T15:02:29.570Z"
+        }
+      ],
       "favouritedBy": [
         "abish"
       ]
@@ -155,5 +162,5 @@
       "favouritedBy": []
     }
   ],
-  "updatedAt": "2026-04-26T15:02:19.627Z"
+  "updatedAt": "2026-04-26T15:02:29.570Z"
 }
