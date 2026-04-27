@@ -51,39 +51,43 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 
     <!-- LOGIN -->
     <div class="tab-content on" id="f-login">
-      <div class="form-group">
-        <label class="label">Username</label>
-        <div class="input-wrap"><span class="i-icon">👤</span><input class="input" id="l-u" type="text" placeholder="your_username" autocomplete="username"></div>
-      </div>
-      <div class="form-group">
-        <label class="label">Password</label>
-        <div class="pw-wrap"><input class="input" id="l-p" type="password" placeholder="••••••••" autocomplete="current-password"><button class="pw-toggle" onclick="togglePw('l-p',this)">👁️</button></div>
-      </div>
-      <div class="err-msg" id="l-err"></div>
-      <button class="submit-btn" id="l-btn" onclick="doLogin()">Sign In →</button>
+      <form onsubmit="event.preventDefault();doLogin()">
+        <div class="form-group">
+          <label class="label">Username</label>
+          <div class="input-wrap"><span class="i-icon">👤</span><input class="input" id="l-u" type="text" placeholder="your_username" autocomplete="username"></div>
+        </div>
+        <div class="form-group">
+          <label class="label">Password</label>
+          <div class="pw-wrap"><input class="input" id="l-p" type="password" placeholder="••••••••" autocomplete="current-password"><button type="button" class="pw-toggle" onclick="togglePw('l-p',this)">👁️</button></div>
+        </div>
+        <div class="err-msg" id="l-err"></div>
+        <button type="submit" class="submit-btn" id="l-btn">Sign In →</button>
+      </form>
       <div class="public-bar" style="margin-top:14px"><a href="public.html">Browse public files without signing in →</a></div>
     </div>
 
     <!-- REGISTER -->
     <div class="tab-content" id="f-reg">
-      <div class="form-row form-row-2">
-        <div class="form-group"><label class="label">Username *</label><div class="input-wrap"><span class="i-icon">@</span><input class="input" id="r-u" type="text" placeholder="cool_name" autocomplete="username"></div></div>
-        <div class="form-group"><label class="label">Display Name</label><div class="input-wrap"><span class="i-icon">✨</span><input class="input" id="r-dn" type="text" placeholder="Your Name"></div></div>
-      </div>
-      <div class="form-group"><label class="label">Email (optional)</label><div class="input-wrap"><span class="i-icon">📧</span><input class="input" id="r-e" type="email" placeholder="you@example.com"></div></div>
-      <div class="form-group">
-        <label class="label">Password *</label>
-        <div class="pw-wrap"><input class="input" id="r-p" type="password" placeholder="Min 6 characters" oninput="strength(this.value)" autocomplete="new-password"><button class="pw-toggle" onclick="togglePw('r-p',this)">👁️</button></div>
-        <div class="strength-row"><div class="strength-fill" id="str-fill"></div></div>
-      </div>
-      <div class="form-group"><label class="label">Confirm Password *</label><div class="pw-wrap"><input class="input" id="r-c" type="password" placeholder="Repeat password" autocomplete="new-password"></div></div>
-      <div class="form-group">
-        <label class="label">Recovery Hint <span style="color:var(--muted);font-weight:400">(for forgot password)</span></label>
-        <input class="input" id="r-hint" type="text" placeholder="e.g. My pet's name is Fluffy">
-        <div class="hint-text">⚠️ This hint will be shown when you forget your password. Don't make it too obvious.</div>
-      </div>
-      <div class="err-msg" id="r-err"></div>
-      <button class="submit-btn" id="r-btn" onclick="doRegister()">Create Account →</button>
+      <form onsubmit="event.preventDefault();doRegister()">
+        <div class="form-row form-row-2">
+          <div class="form-group"><label class="label">Username *</label><div class="input-wrap"><span class="i-icon">@</span><input class="input" id="r-u" type="text" placeholder="cool_name" autocomplete="username"></div></div>
+          <div class="form-group"><label class="label">Display Name</label><div class="input-wrap"><span class="i-icon">✨</span><input class="input" id="r-dn" type="text" placeholder="Your Name" autocomplete="name"></div></div>
+        </div>
+        <div class="form-group"><label class="label">Email (optional)</label><div class="input-wrap"><span class="i-icon">📧</span><input class="input" id="r-e" type="email" placeholder="you@example.com" autocomplete="email"></div></div>
+        <div class="form-group">
+          <label class="label">Password *</label>
+          <div class="pw-wrap"><input class="input" id="r-p" type="password" placeholder="Min 6 characters" oninput="strength(this.value)" autocomplete="new-password"><button type="button" class="pw-toggle" onclick="togglePw('r-p',this)">👁️</button></div>
+          <div class="strength-row"><div class="strength-fill" id="str-fill"></div></div>
+        </div>
+        <div class="form-group"><label class="label">Confirm Password *</label><div class="pw-wrap"><input class="input" id="r-c" type="password" placeholder="Repeat password" autocomplete="new-password"><button type="button" class="pw-toggle" onclick="togglePw('r-c',this)">👁️</button></div></div>
+        <div class="form-group">
+          <label class="label">Recovery Hint <span style="color:var(--muted);font-weight:400">(for forgot password)</span></label>
+          <input class="input" id="r-hint" type="text" placeholder="e.g. My pet's name is Fluffy" autocomplete="off">
+          <div class="hint-text">⚠️ This hint is shown when you forget your password. Don't make it too obvious.</div>
+        </div>
+        <div class="err-msg" id="r-err"></div>
+        <button type="submit" class="submit-btn" id="r-btn">Create Account →</button>
+      </form>
     </div>
 
     <!-- FORGOT -->
@@ -188,11 +192,7 @@ async function doReset(){
     setTimeout(()=>tab('login'),1000);
   }catch(e){showErr('fg-err2',e.message);btn.disabled=false;btn.textContent='Reset Password →'}
 }
-document.addEventListener('keydown',e=>{
-  if(e.key!=='Enter')return;
-  if(document.getElementById('f-login').classList.contains('on'))doLogin();
-  else if(document.getElementById('f-reg').classList.contains('on'))doRegister();
-});
+// Enter key handled by <form onsubmit>
 </script>
 </body>
 </html>

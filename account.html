@@ -99,22 +99,22 @@
         <h3>Security Settings</h3>
         <p class="desc">Change username or password</p>
 
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:20px">
+        <form onsubmit="event.preventDefault();changeUsername()" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:20px">
           <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:14px">Change Username</div>
-          <div class="form-group"><label class="label">New Username</label><div class="input-wrap"><span class="i-icon">@</span><input class="input" id="s-newuser" placeholder="new_username"></div></div>
-          <div class="form-group"><label class="label">Current Password (to confirm)</label><div class="input-wrap"><span class="i-icon">🔑</span><input class="input" id="s-pwforuser" type="password" placeholder="Enter current password"></div></div>
-          <button class="btn btn-secondary btn-sm" onclick="changeUsername()">Change Username</button>
+          <div class="form-group"><label class="label">New Username</label><div class="input-wrap"><span class="i-icon">@</span><input class="input" id="s-newuser" type="text" placeholder="new_username" autocomplete="username"></div></div>
+          <div class="form-group"><label class="label">Current Password (to confirm)</label><div class="input-wrap"><span class="i-icon">🔑</span><input class="input" id="s-pwforuser" type="password" placeholder="Enter current password" autocomplete="current-password"></div></div>
+          <button type="submit" class="btn btn-secondary btn-sm">Change Username</button>
           <div class="save-success" id="user-ok">✓ Username changed! You've been signed out.</div>
-        </div>
+        </form>
 
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:18px">
+        <form onsubmit="event.preventDefault();changePassword()" style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:18px">
           <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:14px">Change Password</div>
-          <div class="form-group"><label class="label">Current Password</label><div class="input-wrap"><span class="i-icon">🔑</span><input class="input" id="s-curpw" type="password" placeholder="Current password"></div></div>
-          <div class="form-group"><label class="label">New Password</label><div class="input-wrap"><span class="i-icon">🔒</span><input class="input" id="s-newpw" type="password" placeholder="Min 6 characters" oninput="strBar(this.value)"></div><div class="str-bar"><div class="str-fill" id="str-fill2"></div></div></div>
-          <div class="form-group"><label class="label">Confirm New Password</label><div class="input-wrap"><span class="i-icon">🔒</span><input class="input" id="s-conpw" type="password" placeholder="Repeat new password"></div></div>
-          <button class="btn btn-primary btn-sm" onclick="changePassword()">🔑 Change Password</button>
+          <div class="form-group"><label class="label">Current Password</label><div class="input-wrap"><span class="i-icon">🔑</span><input class="input" id="s-curpw" type="password" placeholder="Current password" autocomplete="current-password"></div></div>
+          <div class="form-group"><label class="label">New Password</label><div class="input-wrap"><span class="i-icon">🔒</span><input class="input" id="s-newpw" type="password" placeholder="Min 6 characters" oninput="strBar(this.value)" autocomplete="new-password"></div><div class="str-bar"><div class="str-fill" id="str-fill2"></div></div></div>
+          <div class="form-group"><label class="label">Confirm New Password</label><div class="input-wrap"><span class="i-icon">🔒</span><input class="input" id="s-conpw" type="password" placeholder="Repeat new password" autocomplete="new-password"></div></div>
+          <button type="submit" class="btn btn-primary btn-sm">🔑 Change Password</button>
           <div class="save-success" id="pw-ok">✓ Password changed successfully!</div>
-        </div>
+        </form>
       </div>
 
       <!-- STORAGE -->
